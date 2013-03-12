@@ -1,0 +1,272 @@
+<?php
+	require_once "C://WAPPStack//apache2//htdocs//T . i . E !//fw//config.inc";
+    GLOBAL $_PATH;
+    //require_once $_PATH['FRAMEWORK']['HTML']."packageHTML_components.class";
+    require_once $_PATH['FRAMEWORK']['JQUERY']."packageJQuery_components.class";
+    require_once $_PATH['FRAMEWORK']['UTILS']."functions.inc";
+
+    class ajaxHandler
+    {
+        public function __construct ($_form, $_id)
+        {
+			$this->form = $_form;
+			$this->id = $_id;
+			//$this->id = "handler_".$this->form->attributes['id']->value."#".rand();
+			//dump($this->id);
+			$this->i = 0;
+			$this->initSettings();
+        }
+		
+		public function initSettings () 
+		{
+			GLOBAL $_PATH_WEB;
+			$this->setLoadingMode("fullscreen");
+			$this->fullScreenLoadingSettings($_PATH_WEB['FRAMEWORK']['IMAGES']."spinner.gif", "#111111");
+		}
+		
+		public function toXML () 
+		{
+			header("content-type: text/xml; charset=UTF-8;");
+			$arrAjaxContent = $this->getContents();
+            echo "<contents>";
+			if(is_array($arrAjaxContent)) {
+				foreach($arrAjaxContent as $_id => $ajaxContent) {
+					echo "<content id=\"".$ajaxContent->attributes['id']->value."\">".htmlentities(str_replace("\r\n", "", $this->removeContainer($ajaxContent)))."</content>";
+				}
+			}
+            $ajaxMessage = $this->getReturnMessage();
+            if(trim($ajaxMessage->text)) {
+                echo "<message type=\"".$ajaxMessage->type."\">".htmlentities(str_replace("\r\n", "", $ajaxMessage->text))."</message>";
+            }
+			echo "</contents>";
+		}
+
+        public function setReturnMessage ($_returnMessage, $_returnType = "OK")
+        {
+            //$jDialogMessage = new jDialogMessage();
+            $this->returnMessage->type = jDialogMessage::getImgByType($_returnType);
+            $this->returnMessage->text = $_returnMessage;
+        }
+
+        public function getReturnMessage ()
+        {
+            return $this->returnMessage;
+        }
+
+		public function removeContainer ($_ajaxContent) 
+		{
+			if(is_array($_ajaxContent->elements)) {
+				foreach($_ajaxContent->elements as $element) {
+					$content .= $element->getHTML();
+				}
+			}
+			return $content;
+		}
+		
+		public function updateContents ()
+		{
+            $jDialog = new jDialogMessage("{id: ajaxHandlerReturnMessage}");
+            $jDialog->setTitle("Mensagem do Sistema");
+            $msgText = "'+$(data).find('message').text()+'";
+            $msgType = "'+$(data).find('message').attr('type')+'";
+            $jDialog->setMessageContent($msgText, $msgType);
+            $button[] = new actionButton("{id: fecharDialog, value: Fechar}", $jDialog->getCloseScript());
+            $actionBar = new actionBar("{id: actionBarAjax}", $button);
+            $jDialog->setActionBar($actionBar);
+            $HTML = str_replace("\r\n", "", str_replace(addslashes($msgText), $msgText, str_replace(addslashes($msgType), $msgType, addslashes($jDialog->getHTML()))));
+            return "  window.setTimeout('$(\'#ajaxHandlerLoading\').remove()', '2000');
+                      var ret = $(data).find('contents');
+                      ret.find('content').each(function(){
+                          $('#'+$(this).attr('id')).html($(this).text());
+                      });
+                      $('#ajaxHandlerReturnMessage').remove();
+                      //alert('".$HTML."');
+                      //if($(data).find('message').text().trim()) {
+                        $('body').append('".$HTML."');
+                      //}
+				  ";
+		}
+		
+		public function prepareErrorResponse () 
+		{
+            $jDialog = new jDialogMessage("{id: ajaxHandlerError, width: 340, height: 160}");
+            $jDialog->setTitle("Mensagem do Sistema");
+            $jDialog->setMessageContent("Ocorreu um erro ao efetuar a operação!", "ERROR");
+            $button[] = new actionButton("{id: ttt, value: Fechar}", $jDialog->getCloseScript());
+            $actionBar = new actionBar("{id: actionBarAjax}", $button);
+            $jDialog->setActionBar($actionBar);
+            $HTML = str_replace("\r\n", "", addslashes($jDialog->getHTML()));
+            return "$('#ajaxHandlerLoading').remove();
+                    $('body').append('".$HTML."');";
+		}
+		
+		public function setLoadingMode ($_loadingMode) 
+		{
+			$this->loadingMode = mb_strtolower($_loadingMode);
+		}
+		
+		public function getLoadingMode () 
+		{
+			return $this->loadingMode;
+		}
+		
+		public function fullScreenLoadingSettings ($_spinnerPath, $_bgColor = "") 
+		{
+			$this->fsLoadingSettings->spinnerPath = $_spinnerPath;
+			$this->fsLoadingSettings->bgColor = $_bgColor;
+		}
+		
+		public function fullScreenLoading ()
+		{
+			return "function callFullScreenLoading () {
+						$('#ajaxHandlerLoading').remove();
+						var div = $('<div id=\"ajaxHandlerLoading\" />');
+						div.css({
+							'z-index' : '99998',
+							'background-color' : '".$this->fsLoadingSettings->bgColor."',
+							'opacity' : '0.92',
+							'position' : 'absolute',
+							'top' : '0px',
+							'left' : '0px'
+						});
+						div.width($(window).width());
+						div.height($(window).height());
+						var img = $('<div id=\"ajaxHandlerImg\"><img src=\"".$this->fsLoadingSettings->spinnerPath."\"></div>');
+						img.css({
+							'z-index' : '99999',
+							'position' : 'absolute'
+						});
+						div.append(img);
+						$('body').append(div);
+                        $('#ajaxHandlerImg').css({
+							'top' : (($(window).height() / 2) - ($('#ajaxHandlerImg').height() / 2)),
+							'left' : (($(window).width() / 2) - ($('#ajaxHandlerImg').width() / 2))
+						});
+					}
+					callFullScreenLoading();";
+		}
+		
+		public function eachElementLoadingSettings ($_spinnerPath/*, $_bgColor = ""*/) 
+		{
+			$this->eeLoadingSettings->spinnerPath = $_spinnerPath;
+			//$this->eeLoadingSettings->bgColor = $_bgColor;
+		}
+		
+		public function eachElementLoading () 
+		{
+			$arrAjaxContent = $this->getContents();
+			if(is_array($arrAjaxContent)) {
+				foreach($arrAjaxContent as $_id => $ajaxContent) {
+					$l .= "$('#".$ajaxContent->attributes['id']->value."').html('<img src=\"".$this->eeLoadingSettings->spinnerPath."\">');";
+				}
+			}
+			return $l;
+		}
+		
+		public function scripts ()
+        {
+			GLOBAL $_PATH_WEB;
+			script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.min.js");
+            script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.extensions.js");
+			$lMode = $this->getLoadingMode();
+			if($lMode == 'fullscreen') {
+				$loading = $this->fullScreenLoading();
+			} else if($lMode == 'eachelement'){
+				$loading = $this->eachElementLoading();
+			}			
+            $script .= "	".$loading."
+							$(document).ready(function(){
+                                var errorCalled = false;
+								var params = $('#".$this->form->attributes['id']->value."').serialize()+'&rtype=ajax';
+								//alert('".$_SERVER["PHP_SELF"]."?'+params);
+								$.ajax({
+									type: 'GET',
+									url: '".$_SERVER["PHP_SELF"]."',
+									data: params,
+									dataType: 'xml',
+									async: false,
+									success: function(data) {
+										".$this->updateContents()."
+									},
+									complete: function(data, status) {
+                                    	if(status != 'success' && !errorCalled) {
+											".$this->prepareErrorResponse()."
+										}
+									},
+									error: function(data) {
+                                        errorCalled = true;
+										".$this->prepareErrorResponse()."
+									}
+								});
+							});
+							";							
+			return $script;
+        }
+		
+		public function append ($_content) 
+		{
+			$this->contents[$this->i] = $this->inContainer($_content);
+			$this->i++;
+		}
+		
+		public function getContent ($_index) 
+		{
+			return $this->contents[$_index];
+		}
+		
+		public function getContents () 
+		{
+			return $this->contents;
+		}
+		
+		public function inContainer ($_content) 
+		{
+			$div = new div("{id: ".$this->id."_ajaxContent_".$this->i."}");
+			$div->append($_content);
+			return $div;
+		}
+		
+		public function run ()
+		{
+			echo $this->scripts();
+		}
+		
+        public function bind (&$_element, $_event)
+        {
+			$_element->setAttribute($_event, htmlentities($this->scripts()));
+        }		
+    }
+	
+	/*class ajaxContents
+	{
+		public function __construct () 
+		{
+			$this->i = 0;
+		}
+		
+		public function append ($_content) 
+		{
+			$this->contents[$this->i] = $this->inContainer($_content);
+			$this->i++;
+		}
+		
+		public function getContent ($_index) 
+		{
+			return $this->contents[$_index];
+		}
+		
+		public function getContents () 
+		{
+			return $this->contents;
+		}
+		
+		public function inContainer ($_content) 
+		{
+			$div = new div("{id: ajaxContent_".$this->i."}");
+			$div->append($_content);
+			//dump($div);
+			return $div;
+		}
+	}*/
+
+?>

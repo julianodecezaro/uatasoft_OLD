@@ -1,0 +1,16 @@
+@id	TIE_ERROR_3	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	Erro ao tentar fechar o arquivo.
+#end_message
+
+#description
+	O arquivo parece estar bloqueado.
+#end_description
+
+#solution
+	
+#end_solution

@@ -1,0 +1,11 @@
+#title
+	APP :: Criador de Erros de Sistema
+#end_title
+
+#viewclass
+	ErrorCreator_View
+#end_viewclass
+	
+#decorator
+	app_default
+#end_decorator

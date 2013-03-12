@@ -1,0 +1,46 @@
+<?php
+	
+	class ProjectCreator_View extends TiE_View
+	{
+		
+		public function __construct()
+		{
+			$this->ProjectCreator_Controller = new ProjectCreator_Controller($this);
+			$this->ProjectCreator_Controller->run();
+		}
+		
+		public function dbConfig () 
+		{
+			new TiE_Exception(EREERR);
+			
+			$tb = new table();
+			$tb->row();
+			$tb->col(new text("Configurações de banco de dados"), 2);
+			$tb->row();
+			$tb->col(new text("Banco:"));
+			$tb->col(new select("{ id: banco, name: banco, value: ".$this->banco." }", array("PostgreSQL", "MySQL", "MSSQL", "Oracle")));
+			$tb->row();
+			$tb->col(new text("Host:"));
+			$tb->col(new inputText("{ id: host, name: host, value: ".$this->host." }"));
+			$tb->row();
+			$tb->col(new text("Nome do Banco:"));
+			$tb->col(new inputText("{ id: dbname, name: dbname, value: ".$this->dbname." }"));
+			$tb->row();
+			$tb->col(new text("Usuário:"));
+			$tb->col(new inputText("{ id: user, name: user, value: ".$this->user." }"));
+			$tb->row();
+			$tb->col(new text("Senha:"));
+			$tb->col(new inputPassword("{ id: pw, name: pw, value: ".$this->pw." }"));
+			return $tb;
+		}
+		
+		public function formCreate() 
+		{
+			$div = new div();
+			$div->append($this->dbConfig());
+			$div->generate();
+		}
+	
+	}
+	
+?>

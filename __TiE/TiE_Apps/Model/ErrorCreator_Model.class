@@ -1,0 +1,85 @@
+<?php
+	
+	class ErrorCreator_Model extends TiE_Model
+	{
+		
+		public function __construct()
+		{
+			
+		}
+		
+		public function getErrorList()
+		{
+			GLOBAL $_PATH;
+			$handler = opendir($_PATH['FRAMEWORK']['ERROR_LIST']);
+			while ($item = readdir($handler)) {
+				if(!in_array($item, array(".", "..")) && substr($item, 0, strlen($_prefix)) == $_prefix) {
+					$items[] = $item;
+				}
+			}
+			sort($items);
+			return $items;
+		}
+		
+		public function getProjectOptions()
+		{
+			GLOBAL $_PATH;
+			if($this->entity->errorin == 'P') {
+				$handler = opendir($_PATH['PROJECT']['ROOT']);
+				while ($project = readdir($handler)) {
+					if(!in_array($project, array(".", "..", "__TiE"))) {
+						$file = new TiE_File($_PATH['PROJECT']['ROOT'].$project."/info.project");
+						$acronym = $file->getContentInTag("projectacronym", "#/>");
+						$projects[$acronym] = $project;
+						unset($acronym);
+					}
+				}
+				return $projects;
+			}
+		}
+		
+		public function getNextId($_prefix)
+		{
+			GLOBAL $_PATH;
+			$handler = opendir($_PATH['FRAMEWORK']['ERROR_LIST']);
+			while ($item = readdir($handler)) {
+				if(!in_array($item, array(".", "..")) && substr($item, 0, strlen($_prefix)) == $_prefix) {
+					$items[] = $item;
+				}
+			}
+			if(is_array($items)) {
+				foreach($items as $i){
+					$nums[] = (int)str_replace(".ERROR", "", str_replace($_prefix, "", mb_strtoupper($i)));
+				}
+				return $_prefix.(max($nums)+1);
+			}
+		}
+		
+		public function getId()
+		{
+			GLOBAL $_PATH;
+			if($this->entity->errorin == 'F') {
+				$id = $this->getNextId('TIE_ERROR_');
+				if($id) {
+					return $id;
+				}
+				return "TIE_ERROR_0";
+			}elseif($this->entity->errorin == 'P' && $this->entity->project_acronym) {
+				$id = $this->getNextId($this->entity->project_acronym.'_ERROR_');
+				if($id) {
+					return $id;
+				}
+				return $this->entity->project_acronym."_ERROR_0";
+			}
+		}
+		
+		public function getFileContent()
+		{
+			GLOBAL $_PATH;
+			$file = new TiE_File($_PATH['FRAMEWORK']['ERROR_LIST'].$this->entity->error_filename);
+			return $file->getContent();
+		}
+	
+	}
+	
+?>

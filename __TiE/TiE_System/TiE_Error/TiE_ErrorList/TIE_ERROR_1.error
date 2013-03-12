@@ -1,0 +1,16 @@
+@id	TIE_ERROR_1	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	Erro ao tentar identificar o bla bla bla.
+#end_message
+
+#description
+	Descrição do "erro ao tentar identificar o bla bla bla".
+#end_description
+
+#solution
+	Para solucionar este problema você deve configurar um driver de bla bla bla.
+#end_solution

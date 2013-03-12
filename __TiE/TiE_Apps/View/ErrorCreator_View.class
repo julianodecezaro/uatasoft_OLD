@@ -1,0 +1,124 @@
+<?php
+	
+	class ErrorCreator_View extends TiE_View
+	{
+		
+		public function __construct()
+		{
+			//$this->ErrorCreator_Controller = new ErrorCreator_Controller($this);
+			$this->controller = new ErrorCreator_Controller($this);
+		}
+		
+		public function form()
+		{
+			$this->frm = new form("{id:frm, name:frm, method:POST}");
+		}
+		
+		public function _errorList()
+		{
+			$tb = new table("{class: errorList}");
+			if(is_array($this->errorList)) {
+				foreach($this->errorList as $error){
+					$tb->row();
+					$cell = &$tb->col(new text($error));
+					$cell->setAttribute("onClick", TiE_JQuery::submit($this->frm->id, "showErrorFile", array("error_filename"=>$error)));
+				}
+			}			
+			return $tb;
+		}
+		
+		public function _list()
+		{
+			$tb = new table("{id:errorTable}");
+			$tb->row();
+			$div = new div();
+			$div->append($this->_errorList());
+			$div->setAttribute("style", "overflow:auto;");
+			$cell = &$tb->col($div, 1, 1, "tdErrorList");
+			$cell->setAttribute("valign", "top");
+			if($this->errorContent) {
+				$title = new div("divfilename");
+				$title->append(new text($this->error_filename, "{class: filename}"));
+				$btn = new div("{class:divbtnedit}");
+				$btn->append(new button("{class: btndelete, value: Excluir}"));
+				$btn->append(new button("{class: btnedit, value: Editar}"));
+				
+				$head = new table("{class:fileheader, cellpadding: 0, cellspacing: 0}");
+				$head->row();
+				$head->col($title);
+				$head->col($btn);
+				
+				$dc = new div();
+				$dc->append($head);
+				$dc->append(new text("<pre>".$this->errorContent."</pre>"));
+				$cell = &$tb->col($dc, 1, 1, "tdErrorContent");
+				$cell->setAttribute("valign", "top");
+			}
+			return $tb;
+		}
+		
+		public function formErrorList() 
+		{
+			$this->form();
+			$tb = new table("{id: errorFormTable}");
+			$tb->row();
+			$tb->col(new button("{class: btnNewErrorFile, value: Criar novo arquivo de erro}"), 2, 1, "tdNewErrorFile");
+			$tb->row();
+			$tb->col(new text("Erro no:"), 1, 1, "label");
+			$tb->col(CUtils::__FF(new select("{ id: errorin, name: errorin, value: ".$this->errorin." }", array("F"=>"Framework", "P"=>"Projeto"), "Selecione..."), array(), array("onChange"=>TiE_JQuery::submit($this->frm->id, ""))));
+			if($this->errorin) {			
+				$tb->row();
+				$cell = &$tb->col(new text("Erros:"), 1, 1, "label");
+				$cell->setAttribute("valign", "top");
+				$cell = &$tb->col($this->_list());
+				$cell->setAttribute("valign", "top");
+			}
+			$this->frm->append($tb);
+			$this->frm->append(new hidden("{id:error_filename, name:error_filename, value:".$this->error_filename."}"));
+			$this->frm->append(new hidden("{id:sequencePage, name:sequencePage, value:register}"));
+			$this->frm->generate();
+		}
+		
+		public function formCreateNew() 
+		{
+			$this->form();
+			$tb = new table();
+			$tb->row();
+			$tb->col(new text("Erro no:"));
+			$tb->col(CUtils::__FF(new select("{ id: errorin, name: errorin, value: ".$this->errorin." }", array("F"=>"Framework", "P"=>"Projeto"), "Selecione..."), array(), array("onChange"=>TiE_JQuery::submit($this->frm->id, ""))));
+			if($this->errorin) {
+				if($this->errorin == 'P') {
+					$tb->row();
+					$tb->col(new text("Projeto:"));
+					$tb->col(CUtils::__FF(new select("{ id: project_acronym, name: project_acronym, value: ".$this->project_acronym." }", $this->arrProject, "Selecione..."), array(), array("onChange"=>TiE_JQuery::submit($this->frm->id, ""))));
+				}
+				if($this->errorin == 'F' || ($this->errorin == 'P' && $this->project_acronym)) {
+					$tb->row();
+					$tb->col(new text("Id:"));
+					$tb->col(new text($this->id));
+				}
+				$tb->row();
+				$tb->col(new text("Author:"));
+				$tb->col(new inputText("{ id: author, name: author, value: ".$this->author." }"));
+				$tb->row();
+				$tb->col(new text("Mensagem:"));
+				$tb->col(new textarea("{ id: message, name: message, value: ".$this->message." }"));
+				$tb->row();
+				$tb->col(new text("Descrição:"));
+				$tb->col(new textarea("{ id: description, name: description, value: ".$this->description." }"));
+				$tb->row();
+				$tb->col(new text("Solução:"));
+				$tb->col(new textarea("{ id: solution, name: solution, value: ".$this->solution." }"));
+				$tb->row();
+				$tb->col(new text(""));
+				$tb->col(new submit("{ id: btn, name: btn, value: Cadastrar }"));
+			}
+			$this->frm->append($tb);
+			$this->frm->append(new hidden("{id:id, name:id, value:".$this->id."}"));
+			$this->frm->append(new hidden("{id:sequencePage, name:sequencePage, value:register}"));
+			$this->frm->generate();
+		}
+		
+	}
+	
+?>

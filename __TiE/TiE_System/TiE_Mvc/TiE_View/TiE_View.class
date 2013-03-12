@@ -1,0 +1,50 @@
+<?php
+		
+	class TiE_View
+	{
+		
+		public function __construct() 
+		{
+			
+		}
+		
+		protected function __assignString($_name, $_value = "")
+		{
+			$this->$_name = $_value;
+		}
+		
+		protected function __assignArray($_array)
+		{
+			if(is_array($_array)) {
+				foreach($_array as $name => $value) {
+					$this->__assignString($name, $value);
+				}
+			}
+		}
+		
+		public function assign($_this, $_value = "") 
+		{
+			try{
+				if(is_object($_this)){
+					$_this = (array)$_this;
+				}
+				if(is_array($_this)){
+					$this->__assignArray($_this);
+				}else if(is_string($_this)) {
+					$this->__assignString($_this, $_value);
+				}else {
+					throw new TiE_Exception(TiE_ERROR_1);				
+				}
+			}catch (TiE_Exception $e){
+				echo "ERRO: ".$e->getMessage();
+			}
+		}
+		
+		public function run() 
+		{			
+			$this->controller->run();
+		}
+	
+	}
+
+?>

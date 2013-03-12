@@ -1,0 +1,21 @@
+<?php
+	
+	class ProjectCreator_Model extends TiE_Model
+	{
+		
+		public function __construct()
+		{
+			
+		}
+		
+		public function getDbData () 
+		{
+			return (object) array("host" 	=> "192.168.0.16", 
+								  "dbname"  => "dbteste",
+								  "user"  	=> "juliano_cezaro",
+								  "pw"		=> "jc23met05");
+		}
+	
+	}
+	
+?>

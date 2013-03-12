@@ -1,0 +1,191 @@
+<?php
+
+	class jPane
+    {
+        public function __construct ($_component, $_styleHolder = "", $_stylePane = "")
+        {
+            GLOBAL $_PATH_WEB;
+            style($_PATH_WEB['FRAMEWORK']['JQUERY']."css/jPane.css");
+            script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.min.js");
+            script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.mousewheel.js");
+            script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.scrollpane.js");
+            $this->component = $_component;
+            $this->styleHolder = $_styleHolder ? $_styleHolder : "width: 400px; height: 300px;";
+            $this->stylePane = $_stylePane ? $_stylePane : "width: 400px; height: 300px;";
+        }
+
+        public function getHTML ()
+        {
+            $text = new div("{style: padding: 5px;}");
+            $text->append($this->component);
+
+            $pane = new div("{id: pane3}, class: scroll-pane, style: width: ".$this->styleHolder."}");
+            $pane->append($text);
+
+            $holder = new div("{class: holder, style: ".$this->stylePane."}");
+            $holder->append($pane);
+            return $holder->getHTML();
+        }
+
+        public function generate()
+        {
+            echo $this->getHTML();
+        }
+    }
+	
+	class jDialog 
+	{
+		public function __construct ($_attributes = "")
+        {
+			GLOBAL $_PATH_WEB;
+			script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.min.js");
+			script($_PATH_WEB['FRAMEWORK']['JQUERY']."scripts/jquery.extensions.js");
+			$_attributes = Converter::strAttributesToArray($_attributes);
+            $this->params = (object) $_attributes;
+			if(!$this->params->id) { $this->params->id = "jdialog_".rand(); }			
+		}
+		
+		public function setTitle ($_title) 
+		{
+			$this->title = $_title;
+		}
+		
+		public function getTitle () 
+		{
+			return $this->title;
+		}
+		
+		public function setContent ($_content) 
+		{
+			$this->content = $_content;
+		}
+		
+		public function getContent () 
+		{
+			return $this->content;
+		}
+		
+		public function setActionBar ($_actionBar) 
+		{
+			$this->actionBar = $_actionBar;
+		}
+		
+		public function getActionBar () 
+		{
+			return $this->actionBar;
+		}
+
+        public function getCloseScript ()
+        {
+            return "$('#bg_".$this->params->id."').fadeOut(200, function() { $(this).remove(); });";
+        }
+		
+		public function formDialog () 
+		{
+            GLOBAL $_PATH_WEB;
+			$divBG = new div("{id: bg_".$this->params->id."}");
+			$divBG->setAttribute("class", "jDialogBG");
+			$table = new table("{id: ".$this->params->id."}");			
+			$table->setAttribute("class", "jDialog");
+			if($this->params->width || $this->params->height) {
+				$table->setAttribute("style", ($this->params->width ? "width : ".$this->params->width."px;" : "").($this->params->height ? "height : ".$this->params->height."px;" : ""));
+			}
+			$table->row("");
+			$cell = &$table->col(new text($this->getTitle()));
+			$cell->setAttribute("class", "jDialogHeader");
+			$cell = &$table->col(new actionImg("{ src: ".($_PATH_WEB['FRAMEWORK']['IMAGES']."close.png")." }", $this->getCloseScript()));
+			$cell->setAttribute("class", "jDialogHeaderBar");
+            $content = new div("{id: jDialogContent}");
+            $content->append($this->content);
+            $content->setAttribute("style", "overflow: auto;");
+			$table->row("");
+			$cell = &$table->col($content, 2);
+			$cell->setAttribute("class", "jDialogBody");
+			$actionBar = $this->getActionBar();
+			if($actionBar) {
+				$table->row("");
+				$cell = &$table->col($actionBar, 2);
+				$cell->setAttribute("class", "jDialogFooter");
+			}
+			$divBG->append($table);
+			return $divBG;
+		}
+		
+		public function getHTML ()
+        {
+			$html .= $this->formDialog()->getHTML()."
+					<script>
+                        var div = $('#bg_".$this->params->id."');
+						div.css({
+							'z-index' : '99998',
+							'opacity' : '0.92',
+							'position' : 'absolute',
+							'top' : '0px',
+							'left' : '0px'
+						});
+						div.width($(window).width());
+						div.height($(window).height());
+						var content = $('#".$this->params->id."');
+						content.css({
+							'z-index' : '99999',
+							'position' : 'absolute'
+						});
+                        $('#jDialogContent').css({
+                            height: (".($this->params->height)." - $('.jDialogHeader').rHeight() - $('.jDialogFooter').rHeight())
+                        });
+						$('#".$this->params->id."').css({
+							'top' : (($(window).height() / 2) - ($('#".$this->params->id."').rHeight() / 2)),
+							'left' : (($(window).width() / 2) - ($('#".$this->params->id."').rWidth() / 2))
+						});
+					</script>";
+			return $html;
+		}
+		
+		public function generate()
+        {
+            echo $this->getHTML();
+        }
+	}
+
+    class jDialogMessage extends jDialog
+	{
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct($_attributes);
+        }
+
+        public function getImgByType ($_type)
+        {
+            switch (trim(mb_strtolower($_type)))
+            {
+                case "ok":
+                    $img = "msgOk.png";
+                    break;
+                case "alert":
+                    $img = "msgAlert.png";
+                    break;
+                case "error":
+                    $img = "msgError.png";
+                    break;
+                default:
+                    $img = $_type;
+                    break;
+            }
+            return $img;
+        }
+
+        public function setMessageContent ($_message = "", $_type = "")
+        {
+            GLOBAL $_PATH_WEB;
+            $img = $this->getImgByType($_type);
+            $content = new table("");
+            $content->row("");
+            $content->col(new img("{src: ".$_PATH_WEB['FRAMEWORK']['IMAGES'].$img."}"));
+            //dump(trim(mb_strtolower($_type)));
+            $cell = &$content->col(new text($_message));
+            $cell->setAttribute("style", "padding: 15px;");
+            $this->setContent($content);
+        }
+    }
+
+?>

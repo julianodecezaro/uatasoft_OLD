@@ -1,0 +1,266 @@
+<?php
+
+    class Converter
+    {
+        public function strAttributesToArray ($_string)
+        {
+            $string = trim($_string);
+            if ($string[0] == "{" && $string[strlen($string)-1] == '}') {
+                $string = str_replace("{", "", $string);
+                $string = str_replace("}", "", $string);
+                $arrString = explode(",", $string);
+                if (is_array($arrString)) {
+                    foreach ($arrString as $str) {
+                        $i = 0;
+                        $arrAttribute = explode(":", Converter::attributeCommaToComma($str), 2);
+                        $arrAttr[trim($arrAttribute[0])] = trim($arrAttribute[1]);
+                        unset($arrAttribute);
+                    }
+                }
+                return $arrAttr;
+            } else {
+                return -1;
+            }
+        }
+    
+        public function arrayToStrAttributes ($_array)
+        {
+            $i = 0;
+            $str = "{";
+            if (is_array($_array)) {
+                foreach ($_array as $attribute => $value) {
+                    if ($i > 0) {
+                        $str .= ", ";
+                    }
+                    $str .= $attribute.": ".Converter::commaToAttributeComma($value);
+                    $i++;
+                }
+            }
+            $str .= "}";
+            return $str;
+        }
+
+        public function commaToAttributeComma ($_string)
+        {
+            return str_replace(",", "[#comma#]", $_string);
+        }
+
+        public function attributeCommaToComma ($_string)
+        {
+            return str_replace("[#comma#]", ",", $_string);
+        }
+    }
+	
+	class scripts 
+	{
+		/**
+		 * Método que carrega os dados do banco.
+		 * Data de criação: 07/09/2011
+		 * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+		 *
+		 * @param String $_formId, armazena o identificador do formulário.
+		 * @param String $_sequencePage, armazena a sequencePage.
+		 * @param Array $_arrHiddens, armazena um arranjo de hiddens que terão o valor modificado.
+		 * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+		 * @version 1.0.0.0
+		 */
+		public function submit($_formId, $_sequencePage, $_arrHiddens = null, $_action = null, $_target = '_self')
+		{
+			//dump($_action);
+			if(is_array($_arrHiddens) && count($_arrHiddens)>0){
+				foreach ($_arrHiddens as $h_id => $h_value) {
+					$hids .= " frm.elements['".$h_id."'].value='".$h_value."'; ";
+				}
+			}
+			$script = "var frm = document.getElementById('".$_formId."'); frm.elements['sequencePage'].value='".$_sequencePage."';$hids".($_action?"frm.action='#$_action'; ":"frm.action='';")."frm.target='".$_target."'; frm.submit();";
+			return $script;
+		}
+	}	
+	
+	class Date 
+	{
+		/**
+		*   Retorna um timestamp sql baseado na data(em formato brasileiro) e hora, passados como parâmetro. Caso data ou hora seja inválida, a função retornará o menor valor possível de data, no caso 1969-12-31 21:00:00
+		*
+		*@author Henrique D. Vianna <henrique_vianna@uniritter.edu.br>
+		*@param string $_dataBR Data no formato brasileiro que será utilizada para criar o timestamp
+		*@param string $_hora Hora no formato hh:mm:ss
+		*@return string Retorna um timestamp baseado na data(em formato brasileiro) e hora, passados como parâmetro. Caso data ou hora seja inválida, a função retornará o menor valor possível de data, no caso 1969-12-31 21:00:00
+		*/
+		function getTimestampFromDataBRHora($_dataBR, $_hora = "00:00:00") 
+		{
+			if (Date::isDate($_dataBR) && Date::isTime($_hora)) {			
+				$data = Date::dmyToymd($_dataBR);
+				return "$data $_hora";
+			} else
+				return date ("Y-m-d H:i:s", 0);
+
+		}
+		
+		/**
+		*   Retorna uma data no formato brasileiro a partir do timestamp sql passado como parâmetro
+		*
+		*@author Henrique D. Vianna <henrique_vianna@uniritter.edu.br>
+		*@param string $_timestamp Timestamp sql no formato aaaa-mm-dd hh:mm:ss
+		*@return string  Retorna uma data no formato brasileiro a partir do timestamp sql passado como parâmetro
+		*/
+		function getDataBRFromTimestamp($_timestamp) 
+		{
+			if (strlen(trim($_timestamp)) > 0) {
+				$timestamp = Date::retiraMileSegundosFromTimestamp($_timestamp);
+				$intTimestamp = strtotime($timestamp);
+				return date("d/m/Y", $intTimestamp);
+			} else
+				return "";
+		}
+		
+		/**
+		*   Retorna uma hora a partir do timestamp sql passado como parâmetro
+		*
+		*@author Henrique D. Vianna <henrique_vianna@uniritter.edu.br>
+		*@param string $_timestamp Timestamp sql no formato aaaa-mm-dd hh:mm:ss
+		*@return string   Retorna uma hora a partir do timestamp sql passado como parâmetro
+		*/
+		function getHoraFromTimestamp($_timestamp, $_seconds = true) 
+		{
+			if(strlen($_timestamp)>0) {
+				$timestamp = Date::retiraMileSegundosFromTimestamp($_timestamp);
+				$intTimestamp = strtotime($timestamp);
+				return date("H:i".($_seconds?":s":""), $intTimestamp);
+			}else {
+				return "";
+			}
+		}
+		
+		// metodo que verifica se um valor é valido como data
+		function isDate($param)
+		{
+			$result = false;
+			$param = trim($param);
+
+			if (($param != "") || (!empty($param))){
+				$data = explode("/", "$param");
+
+				if ( count($data) != 3 ) {
+					return false;
+				}
+
+				$d = $data[0];
+				$m = $data[1];
+				$y = $data[2];
+
+				if ((is_numeric($m)) and (is_numeric($d)) and (is_numeric($y) && strlen($y)==4)) {
+					$res = checkdate($m, $d, $y);
+					if ($res == 1){
+						$result = true;
+					} else {
+						$result = false;
+					}
+				}else{
+					$result = false;
+				}
+
+			}
+			return $result;
+		}
+
+		function isTime($_hora, $_24horas = true) 
+		{
+			if (strlen($_hora)>5 || strlen($_hora)<4)
+				return false;
+
+			$hora = explode(":",$_hora);
+
+			if(count($hora)!=2)
+				return false;
+
+			if ($_24horas) {
+				$minHora = 0;
+				$maxHoras = 23;
+			} else {
+				$minHora = 1;
+				$maxHoras = 12;
+			}
+
+			if(($hora[0] < $minHora) || ($hora[0] > $maxHoras))
+				return false;
+
+			if(($hora[1] < 0)  || ($hora[1] > 59))
+				return false;
+
+			return true;
+
+		}
+		
+		/**
+		* Retira os milesegundos do sql timestamp
+		*
+		*@return string Retorna uma string de sql timestamp sem os milesegundos
+		*/
+		function retiraMileSegundosFromTimestamp($_timestamp) 
+		{
+			$arrTimestamp = explode(".", $_timestamp);
+			return $arrTimestamp[0];
+		}
+
+		var $dateSize = "";
+
+		// funcao que transforma uma data de Y-M-D para D/M/Y
+		function ymdTodmy($param){
+			$param = trim($param);
+
+			if (($param != "") || (!empty($param))){
+				$data = explode("-", "$param");
+				$d = $data[2];
+				$m = $data[1];
+				$y = $data[0];
+
+				$data = $d . "/" . $m . "/" . $y;
+				return $data;
+			}
+		}
+
+		// funcao que transforma uma data de D/M/Y para Y-M-D
+		function dmyToymd($param){
+			$param = trim($param);
+
+			if (($param != "") || (!empty($param))){
+				$data = explode("/", "$param");
+				$d = $data[0];
+				$m = $data[1];
+				$y = $data[2];
+
+				$data = $y . "-" . $m . "-" . $d;
+
+				return $data;
+			}
+		}
+
+		function formatDateBR($orig_data){
+			$dateTime = new pkuDateTime();
+			if ($dateTime->isDate($orig_data)){
+				$data = explode("/","$orig_data");
+				$d=$data[0];
+				$m=$data[1];
+				$y=$data[2];
+
+				if (($y>=0) && ($y < 80)){
+					if(strlen($y) == 1){
+						$y = "200".$y;
+					} elseif(strlen($y) == 2) {
+						$y = "20".$y;
+					}
+				} elseif (($y>=81) && ($y < 99) ) {
+					if(strlen($y) == 2){
+						$y = "19".$y;
+					}
+				}
+
+				$res = sprintf("%02d/%02d/%04d", $d, $m, $y);
+				return $res;
+			}else{
+				return "";
+			}
+		}
+	}
+?>

@@ -1,0 +1,34 @@
+<?php
+	
+	class TesteClass_View extends TiE_View
+	{
+		
+		public function __construct(&$_db)
+		{
+			//$this->ErrorCreator_Controller = new ErrorCreator_Controller($this);
+			$this->db = $_db;
+			$this->controller = new TesteClass_Controller($this);
+		}
+		
+		public function __ini()
+		{
+			$u = new Usuario_Table($this->db);			
+			$t = new Teste_Table($this->db);
+
+			//dump($uObj->getColumns());			
+			$clause = $u->setValue(array("usua_id"=>1, "usua_nome"=>"Juliano", "usua_bla" => array(1, 2, 5, 75), "usua_tche"=>array("ronaldo", "maria")));
+			
+			dump(PHP_EOL .
+				TiE_Query::select(array("usua_id", "usua_nome")) .
+				TiE_Query::from() . 
+				TiE_Query::leftjoin($u, $t) . 
+				TiE_Query::where($clause)
+				);
+
+			//$u = new Usuario_Table($this->db);
+			//$u->get();
+		}
+		
+	}
+	
+?>

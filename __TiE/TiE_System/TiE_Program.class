@@ -1,0 +1,118 @@
+<?php
+
+	class TiE_Program 
+	{
+		protected $prog_id;
+		protected $frameworkApp;
+		protected $arrHeader;
+		
+		public function __construct($_prog_id, $_frameworkApp = false)
+		{
+			$this->prog_id = $_prog_id;
+			$this->frameworkApp = $_frameworkApp;
+		}
+		
+		public function addInHeader($_header) 
+		{
+			$this->arrHeader[] = $_header;
+		}
+		
+		public function setTitle($_title) 
+		{
+			$this->title = $_title;
+		}
+		
+		public function getTitle() 
+		{
+			return $this->title;
+		}
+		
+		public function setClass($_class) 
+		{
+			$this->_class = $_class;
+		}
+		
+		public function getClass() 
+		{
+			return $this->_class;
+		}
+		
+		public function setDecorator($_decorator) 
+		{
+			$this->decorator = $_decorator;
+		}
+		
+		public function getDecorator() 
+		{
+			return $this->decorator;
+		}
+		
+		public function setStrConn($_strConn) 
+		{
+			$this->strConn = $_strConn;
+		}
+		
+		public function getStrConn() 
+		{
+			return $this->strConn;
+		}
+		
+		public function runFwAppProgram () 
+		{
+			GLOBAL $_PATH;
+			$TiE_File = new TiE_File($_PATH['FRAMEWORK']['APPS_DEFINES'].$this->prog_id.".define");
+			$title = $TiE_File->getContentInTag("#title", "#end_title");
+			$class = $TiE_File->getContentInTag("#viewclass", "#end_viewclass");
+			$decoratorClass = $TiE_File->getContentInTag("#decorator", "#end_decorator");			
+			$decorator = new TiE_Layout($decoratorClass, new $class(), $title);
+			if(is_array($this->arrHeader)) $decorator->objDecorator->addInHeader($this->arrHeader);
+			$decorator->generate();
+		}
+		
+		public function runProgram()
+		{
+			$dbdata = (object)null;
+			$dbdata->decorator = $tal;
+			$dbdata->_class = $tal;
+			$dbdata->title = $tal;
+			
+			$d = $this->getDecorator();
+			$decorator = $d ? $d : $dbdata->decorator;
+			$c = $this->getClass();
+			$class = $c ? $c : $dbdata->_class;
+			$t = $this->getTitle();
+			$title = $t ? $t : $dbdata->title;
+		
+			$decorator = new TiE_Layout($decorator, new $class($this->conn), $title);
+			$decorator->generate();
+		}
+		
+		public function dbConnect()
+		{
+			GLOBAL $DEFAULT_DB;
+			$__conn = $this->getStrConn();
+			if(!$__conn) {
+				$conn = $DEFAULT_DB;
+			}else {
+				$conn = $__conn;
+			}
+			$TiE_Connection = new TiE_Connection($conn);
+			$this->conn = $TiE_Connection->connect();
+			
+			$TiE_Db = new TiE_Db($this->conn);
+			dump($TiE_Db->loadSchema());
+		}
+		
+		public function run()
+		{
+			$this->dbConnect();
+			if($this->frameworkApp) {
+				$this->runFwAppProgram();
+			}else {
+				$this->runProgram();
+			}
+		}
+	
+	}
+
+?>

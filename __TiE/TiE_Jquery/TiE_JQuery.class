@@ -1,0 +1,25 @@
+<?php
+
+	class TiE_JQuery
+    {
+        
+		public function __construct ()
+        {
+            
+        }
+
+        public function submit($_formId, $_sequencePage, $_arrHiddens = null, $_action = null, $_target = '_self')
+		{
+			//dump($_action);
+			if(is_array($_arrHiddens) && count($_arrHiddens)>0){
+				foreach ($_arrHiddens as $h_id => $h_value) {
+					$hids .= " frm.elements['".$h_id."'].value='".$h_value."'; ";
+				}
+			}
+			$script = "var frm = document.getElementById('".$_formId."'); frm.elements['sequencePage'].value='".$_sequencePage."';$hids".($_action?"frm.action='#$_action'; ":"frm.action='';")."frm.target='".$_target."'; frm.submit();";
+			return $script;
+		}
+        
+    }
+
+?>

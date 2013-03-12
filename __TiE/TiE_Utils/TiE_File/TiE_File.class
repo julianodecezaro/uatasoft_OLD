@@ -1,0 +1,105 @@
+<?php
+	
+	require_once $_PATH['FRAMEWORK']['EXCEPTIONS']."TiE_File_Exception.class";
+	//namespace UTIL_FILE;
+
+	class TiE_File
+	{
+		protected $filePath;
+		protected $mode;
+		protected $handle;
+		
+		public function __construct($_filePath, $_mode = "r")
+		{
+			$this->filePath = $_filePath;
+			$this->mode = $_mode;
+		}
+		
+		public function exists($_fPath = "")
+		{
+			$fPath = ($this->filePath ? $this->filePath : $_fPath);
+			if(!@file_exists($fPath)) {
+				throw new TiE_File_Exception(TiE_ERROR_5, array("#_{file}"=>$fPath));
+				return false;
+			}
+			return true;
+		}
+		
+		public function open($_use_include_path = false, $_context = false) 
+		{
+			if(!$this->exists()) return false;
+			$this->handle = @fopen($this->filePath, $this->mode, $_use_include_path, $_context);
+			if(!is_resource($this->handle)){
+				throw new TiE_File_Exception(TiE_ERROR_2);
+			}
+		}
+		
+		public function close()
+		{
+			if(!is_resource($this->handle) || !@fclose($this->handle)) {
+				throw new TiE_File_Exception(TiE_ERROR_3);
+			}
+		}
+		
+		public function write($_content, $_len = null) 
+		{
+			if(!is_resource($this->handle) || !@fwrite($this->handle, $_content, $_len)) {
+				throw new TiE_File_Exception(TIE_ERROR_2);
+			}			
+		}
+		
+		public function getContent()
+		{
+			if(!$this->exists()) return false;			
+			$content = @file_get_contents($this->filePath);
+			if(!$content) {
+				throw new TiE_File_Exception(TiE_ERROR_4);
+				return false;
+			}
+			return $content;
+		}
+		
+		public function putContent($_content, $_overwriteFile = false)
+		{
+			$content = file_put_contents($this->filePath, $_content, (!$_overwriteFile ? FILE_APPEND : NULL));
+			if(!$content) {
+				throw new TiE_File_Exception(TiE_ERROR_2);
+				return false;
+			}
+			return $content;
+		}
+		
+		public function contentExists($_str) 
+		{
+			$file = $this->getContent();
+			if(strpos($file, $_str)) {
+				return true;
+			}
+			return false;
+		}
+		
+		public function getContentInTag($_tagBegin, $_tagEnd = "", $_html_proc = false) 
+		{
+			$file = $this->getContent();	
+			if(strpos($file, $_tagBegin) !== false && (!$_tagEnd || (strpos($file, $_tagEnd) !== false))) {
+				$str = explode($_tagBegin, $file);
+				if($_tagEnd) {
+					$str = explode($_tagEnd, $str[1]);
+					return (!$_html_proc ? htmlentities(trim($str[0])) : trim($str[0]));
+				}else {
+					return (!$_html_proc ? htmlentities(trim($str[1])) : trim($str[1]));
+				}
+			}
+			return false;
+		}
+		
+		public function _flush () 
+		{
+			if(is_resource($this->handle)) {
+				fflush($this->handle);
+			}
+		}
+	
+	}
+
+?>

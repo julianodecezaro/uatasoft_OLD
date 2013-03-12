@@ -1,0 +1,34 @@
+<?php
+
+	class TiE_Log
+	{
+		protected $filePath;
+		protected $content;
+		
+		public function __construct($_filePath = "", $_content = "")
+		{
+			$this->filePath = $_filePath;
+			$this->content = $_content;
+		}
+		
+		public function register()
+		{
+			$file = new TiE_File($this->filePath);
+			$file->putContent($this->content);
+		}
+		
+		public function registerDefaultError($_error)
+		{
+			try{
+				GLOBAL $_PATH;
+				$_filePath = $_PATH['FRAMEWORK']['LOGS']."20120809#__#PROJETO_TESTE.log";
+				$file = new TiE_File($_filePath);
+				$file->putContent(date('H:i:s')."	".$_error."\r\n");
+			}catch(TiE_File_Exception $e) {
+				echo "<div>Erro [".get_class($e)."]: ".$e->getMessage()."</div>";
+			}
+		}
+		
+	}
+
+?>

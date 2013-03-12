@@ -1,0 +1,40 @@
+<?php
+
+	class TiE_Layout
+	{	
+		protected $decorator;
+		protected $instance;
+		protected $title;
+		public $objDecorator;
+	
+		public function __construct($_decorator, $_instance, $_title)
+		{
+			$this->decorator = $_decorator;
+			$this->instance = $_instance;
+			$this->title = $_title;
+			$this->decoratorDefinition();
+		}
+		
+		public function decoratorDefinition()
+		{
+			GLOBAL $_PATH;
+			switch(mb_strtoupper($this->decorator)) {
+				default:
+					
+					break;
+				case "APP_DEFAULT":
+				case "DEFAULT_HTML":				
+					require_once $_PATH['FRAMEWORK']['DECORATORS']."TiE_Decorator_HTML.class";
+					$this->objDecorator = new TiE_HTML_Default($this->instance, $this->title);
+					break;
+			}
+		}
+		
+		public function generate()
+		{
+			$this->objDecorator->generate();
+		}
+		
+	}
+	
+?>

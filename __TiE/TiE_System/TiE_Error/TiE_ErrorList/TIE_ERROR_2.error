@@ -1,0 +1,16 @@
+@id	TIE_ERROR_2	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	Nao foi poss¡vel escrever no arquivo.
+#end_message
+
+#description
+	Arquivo parece estar bloqueado para grava‡ao.
+#end_description
+
+#solution
+	
+#end_solution

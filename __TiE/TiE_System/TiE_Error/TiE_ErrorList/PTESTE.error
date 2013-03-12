@@ -1,0 +1,16 @@
+@id	PTESTE	_@
+@creation_date	2012-08-06	_@
+@author	author test	_@
+@last_update	2012-08-12	_@
+
+#message
+	ãçí test
+#end_message
+
+#description
+	descrição teste
+#end_description
+
+#solution
+	solução teste
+#end_solution

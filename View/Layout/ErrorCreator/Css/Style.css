@@ -1,0 +1,118 @@
+body{
+	margin: 0px;	
+}
+
+span{
+	font: 13px Tahoma, Verdana, Arial;
+}
+
+pre{
+	margin: 0px;
+	padding: 10px;
+}
+
+.tdErrorList{	
+	width: 20%;
+	border: 2px #2E64DB solid;
+	padding: 0px;
+	background-color: #CCCCCC;
+}
+
+.errorList{
+	width: 100%;
+	border-collapse: collapse;	
+}
+
+.filename{
+	text-decoration: underline;
+	font: bold 15px Tahoma, Verdana, Arial;
+	padding-left: 7px;
+}
+
+.fileheader td{
+	padding: 3px;
+	background-color: #EEEEEE;
+}
+
+.fileheader{
+	width: 100%;
+	margin: 0px;
+	border-bottom: 1px #333333 dotted;	
+}
+
+.errorList td{
+	padding: 10px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	background-color: #5E89ED;
+	color: #FFFFFF;	
+	cursor: pointer;
+	border-bottom: 1px #EEEEEE dotted;
+}
+
+.errorList td:hover{
+	background-color: #8CAAEA;
+	color: #FFFFFF;
+	border-bottom: 1px #FFFFFF dotted;
+}
+
+.errorList td span{
+	font: bold 11px Tahoma, Verdana, Arial;
+}
+
+.tdErrorContent{
+	width: 80%;
+	border: 2px #333333 solid;
+	padding: 0px;
+}
+
+#errorTable{
+	width: 100%;
+}
+
+#errorFormTable{
+	width: 100%;
+}
+
+.label{
+	text-align: right;
+	width: 70px;
+}
+
+.tdNewErrorFile{
+	border-bottom: 1px #333333 dotted;
+	padding: 10px;
+	background-color: #EEEEEE;
+}
+
+.btnNewErrorFile{
+	height: 34px;
+	width: 230px;
+	border: 0px;
+	background-color: #333333;
+	color: #FFFFFF;
+	cursor: pointer;
+	font-weight: bold;
+}
+
+.divbtnedit{
+	text-align: right;
+}
+
+.btnedit{
+	background-color: #4EB247;
+}
+
+.btndelete{
+	background-color: #D63E3B;
+}
+
+.btnedit, .btndelete{
+	color: #FFFFFF;
+	border: 0px;
+	width: 100px;
+	height: 28px;
+	cursor: pointer;
+	padding-bottom: 4px;
+	font-weight: bold;
+}

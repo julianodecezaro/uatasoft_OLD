@@ -1,0 +1,200 @@
+<?php
+
+class TiE_Db
+{
+	public function __construct(&$_conn)
+	{
+		$this->conn = $_conn;
+		$this->setUp();
+	}
+
+	public function setUp(){}
+
+	public function setEntity($_entity)
+	{
+		$this->entity = $_entity;	
+	}	
+	
+	public function execute($_sql)
+	{
+		return pg_query($this->conn->id, $_sql);
+	}
+	
+	public function getMatrix($_sql)
+	{
+		$q = $this->execute($_sql);
+		return pg_fetch_all($q);
+	}
+	
+	public function convertConstraints($_str)
+	{
+		$arrRet = array();
+		$arr = json_decode($_str);
+		if(is_array($arr)) {
+			foreach($arr as $id=>$row){
+				$arr2 = explode(";", $row);
+				//dump($arr2);
+			}
+		}
+		return $arrRet;
+	}
+	
+	public function loadSchema()
+	{
+		$sql = "SELECT tablename, typname as type, a.attname as name,
+						array_to_json(array((SELECT
+							'constraint_name='||tc.constraint_name||';'||
+							'table_name='||tc.table_name||';'||
+							'column_name = '||kcu.column_name
+						FROM 
+							information_schema.table_constraints AS tc 
+							JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name
+						WHERE constraint_type = 'PRIMARY KEY' AND tc.table_name=pg_tables.tablename))) as pk,
+						array_to_json(array((SELECT
+							'constraint_name='||tc.constraint_name||';'||
+							'table_name='||tc.table_name||';'||
+							'column_name = '||kcu.column_name||';'||
+							'foreign_table_name='||ccu.table_name||';'||
+							'foreign_column_name='||ccu.column_name
+						FROM 
+							information_schema.table_constraints AS tc 
+							JOIN information_schema.key_column_usage AS kcu ON tc.constraint_name = kcu.constraint_name
+							JOIN information_schema.constraint_column_usage AS ccu ON ccu.constraint_name = tc.constraint_name
+						WHERE constraint_type = 'FOREIGN KEY' AND tc.table_name=pg_tables.tablename))) as fk
+				FROM pg_tables JOIN
+					pg_attribute a on a.attrelid = (select oid from pg_class where relname = pg_tables.tablename)
+						left join pg_attrdef adef on a.attrelid=adef.adrelid and a.attnum=adef.adnum
+						left join pg_type t on a.atttypid=t.oid
+						left join pg_description d on (a.attrelid = d.objoid and a.attnum = d.objsubid)	
+				WHERE schemaname = 'public' AND a.attnum > 0
+				ORDER BY tablename";
+		$matrix = $this->getMatrix($sql);
+		if(is_array($matrix)){
+			foreach($matrix as $row){
+				$row = (object) $row;
+				$arr[$row->tablename][$row->name] = (object)null;
+				$arr[$row->tablename][$row->name]->type = $row->type;
+				$arr[$row->tablename][$row->name]->pk = $this->convertConstraints($row->pk);
+				$arr[$row->tablename][$row->name]->fk = $this->convertConstraints($row->fk);
+			}
+		}
+		//dump($arr);
+	}
+	
+	public function setTable($_table)
+	{
+		$this->__table = $_table;
+	}
+
+	public function getTable()
+	{
+		return $this->__table;
+	}
+	
+	public function setColumn($_name, $_type, $_not_null = false)
+	{
+		$col = (object)null;
+		$col->name = $_name;
+		$col->type = $_type;
+		$col->not_null = $_not_null;
+		$this->__column[] = $col;
+	}
+
+	public function _getColumns()
+	{
+		return $this->__column;
+	}
+	
+	public function setPk($_pk_name, $_arrPks)
+	{
+		if(is_array($_arrPks)){
+			foreach($_arrPks as $column){
+				$this->__pk[$_pk_name][] = $column;
+			}
+		}
+	}	
+
+	public function getPk()
+	{
+		return $this->__pk;
+	}
+
+	public function setFk($_obj)
+	{
+		$this->__fk->{$_obj->fk_name} = $_obj;
+		$this->__fk->{$_obj->reltable} = $_obj->fk_name;
+	}	
+
+	public function getFks()
+	{
+		return $this->__fk;
+	}
+	
+	public function get()
+	{
+		
+	}
+
+	public function save()
+	{
+		
+	}
+
+	public function getColumns()
+	{
+		$cols = $this->_getColumns();
+		if(is_array($cols) && count($cols) > 0){
+			foreach ($cols as $key => $value) {
+				$colsObj->{$value->name} = $value;
+				unset($obj);
+			}
+		}
+		return $colsObj;
+	}
+
+	public function setValue($_arr)
+	{
+		$cols = $this->getColumns();
+		if(is_array($_arr) && count($_arr) > 0){
+			foreach ($_arr as $key => $value) {
+				if(isset($cols->$key)){
+					$cols->$key->value = $value;
+				}else{
+					$cols->$key->type = 'error';
+					$cols->$key->value = '@ERROR::'. strtoupper($key) .'::NOT_DEFINED@';
+				}
+			}
+		}
+		return $cols;
+	}
+
+	public function getFkName($_reltable)
+	{
+		$fks = $this->getFks();
+		return $fks->{$_reltable};
+	}
+
+	public function getFk($_fkname)
+	{
+		$fks = $this->getFks();
+		return $fks->{$_fkname};
+	}
+
+}
+
+class __fkobj
+{	
+	public function __construct($_fk_name, $_table1, $_table2, $_arr)
+	{
+		$this->fk_name = $_fk_name;
+		$this->table = $_table1;
+		$this->reltable = $_table2;
+		if(is_array($_arr)){
+			foreach($_arr as $arr){
+				$this->relations[] = $arr;
+			}
+		}
+	}	
+}
+
+?>

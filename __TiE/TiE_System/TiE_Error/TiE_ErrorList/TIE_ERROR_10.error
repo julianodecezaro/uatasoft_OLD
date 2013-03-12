@@ -1,0 +1,16 @@
+@id	TIE_ERROR_10	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	O identificador do erro nao condiz com o identificador no arquivo de erro.
+#end_message
+
+#description
+	O identificador do erro nao condiz com o identificador no arquivo de erro.
+#end_description
+
+#solution
+	
+#end_solution

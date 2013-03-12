@@ -1,0 +1,126 @@
+<?php
+    
+	GLOBAL $_PATH;
+    require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_essencials.class";
+    require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_utils.class";
+    require_once $_PATH['FRAMEWORK']['UTILS']."TiE_Utils.class";
+
+   /**
+    * Classe que abstrai a inserção de um botão de ação.
+    * Data de criação: 07/09/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class actionButton
+    {
+       /**
+        * Método construtor da classe actionButton.
+        * Data de criação: 07/09/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "", $_script = "")
+        {
+		    $this->attributes = $_attributes;
+			$this->script = $_script;
+        }
+
+        public function setSubmit ($_formId = "", $_sequencePage = "", $_arrHiddens = "", $_action = null, $_target = '_self')
+        {
+            $this->script .= scripts::submit($this->formId, $this->sequencePage, $this->arrHiddens, $this->action, $this->target);
+        }
+
+		public function getHTML () 
+		{
+			$button = new button($this->attributes);
+            $button->setAttribute("style", "cursor: pointer;");
+			cUtils::addScript($button, array("onClick" => $this->script));
+			return $button->getHTML();
+		}
+		
+		public function generate () 
+		{
+			echo $this->getHTML();
+		}
+    }
+
+    /**
+    * Classe que abstrai a inserção de uma imagem de ação.
+    * Data de criação: 07/09/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class actionImg
+    {
+       /**
+        * Método construtor da classe actionImg.
+        * Data de criação: 07/09/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "", $_script = "")
+        {
+		    $this->attributes = $_attributes;
+			$this->script = $_script;
+        }
+
+        public function setSubmit ($_formId = "", $_sequencePage = "", $_arrHiddens = "", $_action = null, $_target = '_self')
+        {
+            $this->script .= scripts::submit($this->formId, $this->sequencePage, $this->arrHiddens, $this->action, $this->target);
+        }
+
+		public function getHTML ()
+		{
+			$img = new img($this->attributes);
+            $img->setAttribute("style", "cursor: pointer;");
+			cUtils::addScript($img, array("onClick" => $this->script));
+			return $img->getHTML();
+		}
+
+		public function generate ()
+		{
+			echo $this->getHTML();
+		}
+    }
+	
+	class actionBar 
+	{
+		public function __construct ($_attributes, $_arrActionButton)
+        {
+			$this->attributes = $_attributes;
+			$this->arrActionButton = $_arrActionButton;
+		}
+		
+		public function getHTML () 
+		{
+			$bar = new div($this->attributes);
+			foreach($this->arrActionButton as $actionButton) {
+				$bar->append($actionButton);
+				unset($actionButton);
+			}
+			return $bar->getHTML();
+		}
+		
+		public function generate () 
+		{
+			echo $this->getHTML();
+		}
+	}
+
+?>

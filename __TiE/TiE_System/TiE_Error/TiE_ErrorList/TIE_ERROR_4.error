@@ -1,0 +1,17 @@
+@id	TIE_ERROR_4	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	Nao foi poss¡vel obter o conte£do do arquivo.
+#end_message
+
+#description
+	Nao foi poss¡vel obter o conte£do do arquivo.
+	O arquivo parece estar bloqueado.
+#end_description
+
+#solution
+	
+#end_solution

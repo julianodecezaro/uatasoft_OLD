@@ -1,0 +1,65 @@
+<?php
+
+class TiE_Connection
+{
+
+	public function __construct($_strConn)
+	{
+		$this->strConn = $_strConn;
+	}
+	
+	public function toParams()
+	{
+		#banco://usuario:senha@servidor/base
+		#pg://postgres:jc23met05@localhost:81/teste"
+		$db = strpart("://", $this->strConn, 0);
+		$p2 = strpart("://", $this->strConn, 1);		
+		//dump($p2);
+		
+		$user = strpart(":", $p2, 0);
+		$p3 = __first(explode(":", $p2), ":");
+		$p3 = $p3->value;
+		$opw = __last(explode("@", $p3), "@");
+		$pw = $opw->value;
+		$p4 = $opw->rest;
+		
+		$server = strpart("/", $p4, 0);
+		$dbname = strpart("/", $p4, 1);
+		
+		$this->database = $db;
+		$this->user = $user;
+		$this->pw = $pw;
+		$this->host = $server;
+		$this->dbname = $dbname;
+	}
+	
+	public function pgConnect()
+	{
+		$obj = (object)null;
+		$obj->host = $this->host;
+		$obj->dbname = $this->dbname;
+		$obj->user = $this->user;
+		$obj->pw = $this->pw;
+		//dump($obj);
+		$conn = pg_connect("host=".$this->host." port=5432 dbname=".$this->dbname." user=".$this->user." password=".$this->pw."") or die("Conexão falhou!");
+		$obj->id = $conn;		
+		$obj->error = pg_last_error($conn);		
+		return $obj;
+	}
+	
+	public function connect()
+	{
+		$this->toParams();
+		switch($this->database){
+			case "pg":
+				return $this->pgConnect();
+				break;
+			default:
+				dump("ERROR: NOT DEFINED!");
+				break;
+		}
+	}
+
+}
+
+?>

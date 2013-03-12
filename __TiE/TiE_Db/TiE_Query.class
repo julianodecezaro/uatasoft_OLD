@@ -1,0 +1,188 @@
+<?php
+
+class TiE_Query
+{
+
+	public function cast($_column)
+	{
+		if(is_array($_column->value) && count($_column->value)){
+			$num = count($_column->value);
+			$in = "(";
+			foreach ($_column->value as $key => $value) {
+				$i++;
+				$c->type = $_column->type;
+				$c->value = $value;
+				$in .= TiE_Query::cast($c);
+				if($i < $num) $in .= ", ";
+			}
+			return $in.")";
+		}
+		switch (trim(strtolower($_column->type))) {
+			case 'character varying':
+			case 'varchar':
+			case 'text':
+			case 'character':
+			case 'char':
+			case 'timestamp':
+			case 'timestamp with time zone':
+			case 'timestamp without time zone':
+			case 'interval':
+			case 'date':
+			case 'time':
+			case 'time with time zone':
+			case 'time without time zone':
+			case 'bytea':
+			case 'boolean':
+			case 'bool':
+				return "'".pg_escape_string($_column->value)."'";
+				break;
+
+			case 'integer':
+			case 'int2':
+			case 'int4':
+			case 'int8':
+			case 'smallint':
+			case 'bigint':
+			case 'decimal':
+			case 'numeric':
+			case 'real':
+			case 'doubleprecision':
+			case 'serial':
+			case 'bigserial':
+			default:
+				return pg_escape_string($_column->value);
+				break;
+		}
+	}
+
+	public function select($_cols)
+	{
+		$numCols = count($_cols);
+		$sql = "SELECT ";
+		if (is_array($_cols) && $numCols > 0){			
+			foreach ($_cols as $key => $value) {
+				$i++;
+				$sql .= $value;
+				if($i < $numCols) $sql .= ", ";				
+			}
+		}else {
+			$sql = "* ";
+		}
+		return $sql.PHP_EOL;
+	}
+
+	public function from($_table = "")
+	{
+		return "FROM ".($_table ? $_table.PHP_EOL : "");	
+	}
+
+	public function where($_cols)
+	{
+		$_cols = (array)$_cols;
+
+		//dump($_cols);
+
+		$numCols = count($_cols);
+		$sql = "WHERE ";
+		if (is_array($_cols) && $numCols > 0){
+			foreach ($_cols as $key => $column) {
+				$i++;
+				$sql .= $key.(is_array($column->value)?" in ":" = ").TiE_Query::cast($column);
+				if($i < $numCols) $sql .= " AND ";
+			}			
+		}
+		return $sql.PHP_EOL;
+	}
+
+	public function orderby()
+	{
+
+	}
+
+	public function limit()
+	{
+
+	}
+
+	public function offset()
+	{
+
+	}
+
+	public function having()
+	{
+
+	}
+
+	public function joinByFk($_t1, $_t2)
+	{
+		$fks = $_t1->getFkName($_t1->getTable());
+		$w = 1;
+		if(!isset($fks)){
+			$fks = $_t1->getFkName($_t2->getTable());
+			$w = 2;
+		}
+		if($w == 1){
+			$__fks = $_t2->getFk($fks);
+		}else if($w == 2){
+			$__fks = $_t1->getFk($fks);
+		}
+		$num = count($__fks->relations);
+		if(is_array($__fks->relations) && $num > 0){
+			foreach ($__fks->relations as $key => $value) {
+				$i++;
+				$sql .= $__fks->table.".".$value[0]." = ".$__fks->reltable.".".$value[1];
+				if($i < $num) $sql .= " AND ";
+			}
+		}
+		return "ON(".$sql.")".PHP_EOL;
+	}
+
+	public function join()
+	{
+		return $_t1->getTable()." JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+	}
+
+	public function leftjoin($_t1, $_t2)
+	{
+		return $_t1->getTable()." LEFT JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+	}
+
+	public function rightjoin()
+	{
+		return $_t1->getTable()." RIGHT JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+	}
+
+	public function innerjoin()
+	{
+		return $_t1->getTable()." INNER JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+	}
+
+	public function outerjoin()
+	{
+		return $_t1->getTable()." OUTER JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+	}
+
+	public function update()
+	{
+
+	}
+
+	public function set()
+	{
+
+	}
+
+	public function insert()
+	{
+
+	}
+
+	public function values()
+	{
+
+	}
+
+}
+
+?>

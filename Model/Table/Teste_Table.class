@@ -1,0 +1,21 @@
+<?php
+
+class Teste_Table extends TiE_Db
+{
+	public function setUp()
+	{
+		#Table
+		$this->setTable("teste");
+		#Sequence and Constraints
+		//$this->setSequence("");
+		$this->setPk("pk_usuario", array("tes1_id", "tes2_id"));
+		#Fields
+		$this->setColumn("usua_id", "int4", true);
+		$this->setColumn("usua_nome", "varchar", true);
+		$this->setColumn("usua_bla", "integer", true);
+		$this->setColumn("usua_tche", "varchar", true);
+	}
+	
+}
+
+?>

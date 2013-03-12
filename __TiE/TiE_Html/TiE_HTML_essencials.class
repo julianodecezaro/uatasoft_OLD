@@ -1,0 +1,207 @@
+<?php
+    
+    define("BT1", "\t");
+    define("BT2", "\t\t");
+
+    GLOBAL $_PATH;
+    require_once $_PATH['FRAMEWORK']['UTILS']."TiE_Utils.class";
+
+   /**
+    * Classe que abstrai um elemento hmtl
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0.0
+    */
+    class element
+    {
+	   /**
+		* Método construtor da classe element
+		*
+		* @param String $_name nome do atributo
+		* @param String $_value valor do atributo
+		*/
+        public function __construct ($_elementName = "", $_attributes="", $_endTag = true)
+        {
+			$_attributes = Converter::strAttributesToArray($_attributes);
+            $this->params = (object) $_attributes;
+            $this->elementName = $_elementName;
+			$this->id = $this->params->id;
+            $this->endTag = $_endTag;
+            if (is_array($_attributes)) {
+                foreach ($_attributes as $attribute => $value) {
+                    if (!in_array($attribute, array('label'))) {
+                        $this->setAttribute($attribute, $value);
+                    }
+                }
+            }
+            unset($this->innerHTML);			
+        }
+
+       /**
+		* Método que retorna os atributos para tag do componente
+		*
+		*@return string Retorna os atributos da tag do componente
+		*/
+		public function getAttributes ()
+        {
+			$strAttributes = "";
+            if (is_array($this->attributes) && count($this->attributes) > 0 ) {
+                foreach ($this->attributes as $attribute) {
+                    $strAttributes.=" ".$attribute->getHTML();
+                }
+            }
+			return $strAttributes;
+		}
+
+       /**
+		* Método que retorna os atributos para tag do componente
+		*
+		* @return string Retorna os atributos da tag do componente
+		*/
+		public function setAttribute ($_name, $_value)
+        {
+			$this->attributes[$_name] =  new attribute($_name, $_value);
+		}
+
+       /**
+		* Retorna o atributo de acordo com o nome
+		*
+		* @return tkfAttribute  Retorna o atributo de acordo com o nome
+		*/
+		public function getAttribute ($_name)
+        {
+			return $this->attributes[$_name];
+		}
+
+       /**
+		* Método que adiciona o componente como seu filho
+		*
+		* @param tkfComponent &$_component Componente que será inserido dentro do arranjo de componentes da composição
+		*/
+		public function append (&$_component)
+        {
+			$this->elements[] = &$_component;
+		}
+
+       /**
+		* Retorna a string do componente html
+		*
+		*/
+		public function getAppended ()
+        {
+            $htmlString="";
+            $htmlString .= (isset($this->innerHTML) ? $this->innerHTML : null);
+            if (isset($this->elements) && is_array($this->elements) && count($this->elements) > 0 ) {
+                foreach ($this->elements as $element) {
+				    $htmlString .= $element->getHTML();
+                }
+            }
+			return $htmlString;
+		}
+        
+        public function getHTML ()
+        {
+            $tag = "<".$this->elementName.$this->getAttributes();
+			if ($this->endTag) {
+				$tag.=">".CRLF;
+				$tag .= $this->getAppended();
+				$tag.= "</".$this->elementName.">".CRLF;
+			} else {
+				$tag.=" />".CRLF;
+				$tag .= $this->getAppended();
+			}
+            return $tag;
+        }
+
+        public function innerHTML ($_value)
+        {
+            $this->innerHTML = $_value.CRLF;
+        }
+
+       /**
+		* Gera o componente na tela
+		*
+		*/
+		public function generate ()
+        {
+			echo $this->getHTML();
+		}
+    }
+    
+   /**
+    * Classe que abstrai um atributo de elemento html
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class attribute
+    {
+
+       /**
+		* @var String nome do atributo
+		*/
+		var $name;
+
+       /**
+		* @var String valor do atributo
+		*/
+		var $value;
+
+       /**
+		* Método construtor da classe attribute
+		*
+		* @param String $_name nome do atributo
+		* @param String $_value valor do atributo
+		*/
+		public function __construct ($_name, $_value)
+        {
+			$this->setAttribute($_name, $_value);
+		}
+
+       /**
+		* Método que atribui o nome e o valor ao objeto de atributo
+		*
+		* @param String $_name nome do atributo
+	 	* @param String $_value valor do atributo
+		*/
+		public function setAttribute ($_name, $_value)
+        {
+			$this->name = $_name;
+			$this->value = 	$_value;
+		}
+
+       /**
+		* Método que retorna o nome do atribute
+		*
+		* @return String nome do atributo
+		*/
+		public function getName ()
+        {
+			return $this->name;
+		}
+
+       /**
+		* Método que retorna o valor do atribute
+		*
+		* @return String valor do atributo
+		*/
+		public function getValue ()
+        {
+			return $this->value;
+		}
+        
+		/**
+		* Método que retorna o atributo em formato HTML
+		*
+		* @return String atributo em formato HTML
+		*/
+		public function getHTML ()
+        {
+			return $this->name."=\"".$this->value."\"";
+		}
+	}
+?>

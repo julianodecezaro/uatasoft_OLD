@@ -1,0 +1,14 @@
+<?php
+
+	class TiE_Model 
+	{
+		protected $entity;
+		
+		public function setEntity($_entity)
+		{
+			$this->entity = $_entity;
+		}
+	
+	}
+
+?>

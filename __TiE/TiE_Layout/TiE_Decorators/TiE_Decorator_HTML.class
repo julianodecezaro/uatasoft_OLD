@@ -1,0 +1,63 @@
+<?php
+
+	class TiE_HTML_Default
+	{
+		protected $instance;
+		protected $title;
+		protected $arrHeader;
+		
+		public function __construct(&$_instance, $_title)
+		{
+			$this->instance = $_instance;
+			$this->title = $_title;
+		}
+		
+		public function addInHeader($_header) 
+		{
+			$this->arrHeader = $_header;
+		}
+		
+		public function getArrHeader() 
+		{
+			return $this->arrHeader;
+		}
+		
+		function clearBrowserCache() 
+        {
+            header("Pragma: no-cache");
+            header("Cache: no-cache");
+            header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            header("Cache-Control: no-store, no-cache, must-revalidate");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+        }
+		
+		public function generate()
+		{
+			GLOBAL $_PATH;
+			GLOBAL $_PATH_WEB;
+			$this->clearBrowserCache();
+			echo "<!DOCTYPE html>".CRLF;
+			echo "<html lang=\"pt-br\">".CRLF;
+			echo "<head>".CRLF;
+			echo "<meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">".CRLF;
+            echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />".CRLF;
+			echo "<link rel=\"SHORTCUT ICON\" href=\"favicon.ico\" />".CRLF;
+			$arrHeader = $this->getArrHeader();
+			if(is_array($arrHeader)) {
+				foreach($arrHeader as $header) {
+					echo $header.CRLF;
+				}
+			}
+            echo "<title>".$this->title."</title>".CRLF;
+            echo "<script src=\"".$_PATH_WEB['FRAMEWORK']['JQUERY_JS']."jquery.js"."\"></script>".CRLF;
+			echo "</head>".CRLF;
+			echo "<body onLoad=\"\">".CRLF;
+			$this->instance->run();
+			echo CRLF."</body>".CRLF;
+			echo "</html>".CRLF;
+		}
+		
+	}
+
+?>

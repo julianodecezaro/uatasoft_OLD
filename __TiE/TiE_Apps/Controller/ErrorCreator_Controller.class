@@ -1,0 +1,119 @@
+<?php
+
+	class ErrorCreator_Controller extends TiE_Controller
+	{
+		public function __construct(&$_view)
+		{
+			$this->view = $_view;
+			$this->ErrorCreator_Model = new ErrorCreator_Model();
+		}
+		
+		public function __formErrorList()
+		{
+			$obj->errorList = $this->ErrorCreator_Model->getErrorList();
+			$this->view->assign($obj);
+			$this->view->formErrorList();
+		}
+		
+		public function __generateId() 
+		{
+			if($this->errorin == 'P') {
+				$entity->errorin = $this->errorin;
+				$this->ErrorCreator_Model->setEntity($entity);
+				$obj->arrProject = $this->ErrorCreator_Model->getProjectOptions();
+			}			
+			if($this->errorin == 'F' || ($this->errorin == 'P' && $this->project_acronym)) {
+				$entity->errorin = $this->errorin;
+				$entity->project_acronym = $this->project_acronym;
+				$this->ErrorCreator_Model->setEntity($entity);
+				$obj->id = $this->ErrorCreator_Model->getId();
+			}
+			if($obj) { $this->view->assign($obj); }
+		}
+		
+		public function __formCreateNewError() 
+		{
+			$this->__generateId();
+			$this->view->formCreateNewError();
+		}
+		
+		public function __clearForm()
+		{
+			unset($this->view->errorin,
+				  $this->view->project_acronym,
+				  $this->view->author,
+				  $this->view->message,
+				  $this->view->description,
+				  $this->view->solution,
+				  $this->view->id);
+		}
+		
+		public function __getFileContent()
+		{
+			$content =  "@id	".$this->id."	_@".CRLF;
+			$content .= "@creation_date	2012-08-06	_@".CRLF;
+			$content .= "@author	".$this->author."	_@".CRLF;
+			$content .= "@last_update	".date('Y-m-d')."	_@".CRLF;
+			$content .= "".CRLF;
+			$content .= "#message".CRLF;
+			$content .= _TAB_.$this->message.CRLF;
+			$content .= "#end_message".CRLF;
+			$content .= "".CRLF;
+			$content .= "#description".CRLF;
+			$content .= _TAB_.$this->description.CRLF;
+			$content .= "#end_description".CRLF;
+			$content .= "".CRLF;
+			$content .= "#solution".CRLF;
+			$content .= _TAB_.$this->solution.CRLF;
+			$content .= "#end_solution";
+			return $content;
+		}
+		
+		public function __register()
+		{
+			GLOBAL $_PATH;
+			$file = new TiE_File($_PATH['FRAMEWORK']['ERROR_LIST'].$this->view->id.".error");
+			return $file->putContent($this->__getFileContent(), true);
+		}
+		
+		public function register()
+		{
+			if($this->__register()){
+				$this->__clearForm();
+			}
+			$this->__formCreateNewError();
+		}
+		
+		public function __showErrorFile()
+		{
+			$entity->error_filename = $this->error_filename;
+			$this->ErrorCreator_Model->setEntity($entity);			
+			$obj->errorContent = $this->ErrorCreator_Model->getFileContent();
+			$this->view->assign($obj);
+			$this->__formErrorList();
+		}
+		
+		public function controller()
+		{
+			$this->loadData();
+			$this->view->assign($_REQUEST);
+			//dump($_REQUEST);
+			switch($this->sequencePage) {
+				default:
+					$this->__formErrorList();
+					break;
+				case "createNewError";
+					$this->__formCreateNewError();
+					break;
+				case "showErrorFile";
+					$this->__showErrorFile();
+					break;
+				case "register":
+					$this->register();
+					break;
+			}
+		}
+		
+	}
+	
+?>

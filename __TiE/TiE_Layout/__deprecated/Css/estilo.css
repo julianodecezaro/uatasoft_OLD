@@ -1,0 +1,49 @@
+#menu { top: 42px; }
+#content { top: 42px; left: 202px; }
+input[type=button], input[type=submit] {
+    background-color: #444444;
+    border: 2px #444444 solid;
+    height: 32px;
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #FFFFFF;
+    font: bold 12px Verdana, Arial;
+    cursor: pointer;
+}
+
+.jDialogBG {
+	background-color: #111111;
+}
+
+.jDialog {
+	border: 2px #FFFFFF solid;
+	border-collapse: collapse;
+}
+
+.jDialogHeader, .jDialogHeaderBar {
+	background-color: #333333;
+	color: #FFFFFF;
+	padding: 10px;
+	height: 30px;
+    text-align: center;
+}
+
+.jDialogHeaderBar {
+    width: 32px;
+    cursor: pointer;
+}
+
+.jDialogBody {
+	background-color: #FFFFFF;
+	color: #333333;
+	padding: 10px;
+}
+
+.jDialogFooter {
+	border-top: 1px #CCCCCC inset;
+	background-color: #FFFFFF;
+	color: #333333;
+	padding: 10px;
+    height: 30px;
+    text-align: center;
+}

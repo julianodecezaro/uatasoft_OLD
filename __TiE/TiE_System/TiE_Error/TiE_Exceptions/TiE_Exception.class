@@ -1,0 +1,51 @@
+<?php
+
+	class TiE_Exception extends Exception
+	{
+		protected $__this;
+		protected $errorCode;
+		protected $message;
+		protected $arrVars;
+		
+		public function __construct($_errorCode, $_arrVars = null)
+		{
+			$this->errorCode = $_errorCode;
+			$this->arrVars = $_arrVars;
+			$error = new TiE_Error($_errorCode);			
+			$this->setMessage($error->getErrorMessage());
+		}
+		
+		public function setMessage($_message)
+		{
+			if(is_array($this->arrVars) && count($this->arrVars)) {
+				foreach($this->arrVars as $var => $str){
+					$_message = str_replace(trim($var), trim($str), $_message);
+				}
+			}
+			$_message = str_replace("#_{custom_msg}", "", $_message);
+			$this->message = $_message;
+		}
+		
+		public function setErrorCode($_errorCode)
+		{
+			$this->errorCode = $_errorCode;
+		}
+		
+		public function getErrorCode()
+		{
+			return $this->errorCode;
+		}
+		
+		public function setThis($_this)
+		{
+			$this->__this = $_this;
+		}
+		
+		public function getThis()
+		{
+			return $this->__this;
+		}
+	
+	}
+
+?>

@@ -1,0 +1,11 @@
+#title
+	APP :: Criador de Projetos
+#end_title
+
+#viewclass
+	ProjectCreator_View
+#end_viewclass
+	
+#decorator
+	app_default
+#end_decorator

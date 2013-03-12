@@ -1,0 +1,30 @@
+<?php
+
+	class TesteClass_Controller extends TiE_Controller
+	{
+		public function __construct(&$_view)
+		{
+			$this->view = $_view;
+			$this->ErrorCreator_Model = new ErrorCreator_Model($this->view->db);
+		}
+		
+		public function __ini()
+		{
+			$this->view->__ini();
+		}
+		
+		public function controller()
+		{
+			$this->loadData();
+			$this->view->assign($_REQUEST);
+			//dump($_REQUEST);
+			switch($this->sequencePage) {
+				default:
+					$this->__ini();
+					break;				
+			}
+		}
+		
+	}
+	
+?>

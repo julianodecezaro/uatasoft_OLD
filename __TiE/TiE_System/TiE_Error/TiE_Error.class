@@ -1,0 +1,82 @@
+<?php
+
+	class TiE_Error
+	{
+		protected $errorCode;
+		protected $errorObj;
+		protected $message;
+		
+		public function __construct($_errorCode)
+		{
+			$this->errorCode = mb_strtoupper(trim($_errorCode));
+			$this->getErrorObj();
+		}
+		
+		public function getErrorObj()
+		{
+			try{
+				GLOBAL $_PATH;
+				$file = new TiE_File($_PATH['FRAMEWORK']['ERROR_LIST'].$this->errorCode.".error");				
+				$obj->id = $file->getContentInTag("@id", "_@");
+				if($this->errorCode != mb_strtoupper(trim($obj->id))) {
+					require_once $_PATH['FRAMEWORK']['EXCEPTIONS']."TiE_Error_Exception.class";
+					throw new TiE_Error_Exception(TiE_ERROR_10);
+					return false;
+				}
+				$obj->creation_date = $file->getContentInTag("@creation_date", "_@");
+				$obj->author = $file->getContentInTag("@author", "_@");
+				$obj->last_update = $file->getContentInTag("@last_update", "_@");
+				$obj->message = $file->getContentInTag("#message", "#end_message");
+				$obj->description = $file->getContentInTag("#description", "#end_description");
+				$obj->solution = $file->getContentInTag("#solution", "#end_solution");
+				$this->errorObj = $obj;
+			}catch(TiE_File_Exception $e) {
+				echo "<div>Erro [".get_class($e)."]: ".$e->getMessage()."</div>";
+				TiE_Log::registerDefaultError("Erro [".get_class($e)."]: ".$e->getMessage());
+			}catch(TiE_Error_Exception $e) {
+				echo "<div>Erro [".get_class($e)."]: ".$e->getMessage()."</div>";
+				TiE_Log::registerDefaultError("Erro [".get_class($e)."]: ".$e->getMessage());
+			}catch(Exception $e) {
+				echo "<div>Erro [".get_class($e)."]: ".$e->getMessage()."</div>";
+				TiE_Log::registerDefaultError("Erro [".get_class($e)."]: ".$e->getMessage());
+			}
+		}
+		
+		public function getErrorMessage()
+		{
+			return $this->errorObj->message;
+		}
+		
+		public function getErrorDescription()
+		{
+			return $this->errorObj->description;
+		}
+		
+		public function getErrorSolution()
+		{
+			return $this->errorObj->solution;
+		}
+		
+		public function getErrorId()
+		{
+			return $this->errorCode;
+		}
+		
+		public function getErrorAuthor()
+		{
+			return $this->errorObj->author;
+		}
+		
+		public function getErrorCreationDate()
+		{
+			return $this->errorObj->creation_date;
+		}
+		
+		public function getErrorLastUpdate()
+		{
+			return $this->errorObj->last_update;
+		}
+		
+	}
+
+?>

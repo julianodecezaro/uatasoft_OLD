@@ -1,0 +1,16 @@
+@id	TIE_ERROR_5	_@
+@creation_date	2012-08-06	_@
+@author	Juliano S. De Cezaro <julianodecezaro@gmail.com>	_@
+@last_update	2012-08-07	_@
+
+#message
+	Arquivo inexistente. Caminho: #_{file}. #_{custom_msg}
+#end_message
+
+#description
+	Arquivo parece nao existir ou est  bloqueado.
+#end_description
+
+#solution
+	
+#end_solution

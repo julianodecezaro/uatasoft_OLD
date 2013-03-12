@@ -1,0 +1,30 @@
+<?php
+
+	class ProjectCreator_Controller extends TiE_Controller
+	{
+		public function __construct(&$_view)
+		{
+			$this->view = $_view;
+			$this->ProjectCreator_Model = new ProjectCreator_Model();
+		}
+		
+		public function __formCreate() 
+		{
+			$this->view->assign($this->ProjectCreator_Model->getDbData());
+			//$this->view->assign(123);
+			$this->view->formCreate();
+		}
+		
+		public function controller()
+		{
+			$this->loadData();
+			switch($this->sequencePage) {
+				default:
+					$this->__formCreate();
+					break;
+			}
+		}
+		
+	}
+	
+?>

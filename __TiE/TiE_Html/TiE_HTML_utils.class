@@ -1,0 +1,61 @@
+<?php
+
+	class CUtils
+    {
+        public function __construct () {}
+
+        public function addAttrHTML (&$_component, $_arrAttribute)
+        {
+            return cUtils::setArrAttribute($_component, $_arrAttribute);
+        }
+
+        public function addScript (&$_component, $_arrScript)
+        {
+            return cUtils::setArrAttribute($_component, $_arrScript);
+        }
+
+        public function addStyle (&$_component, $_arrStyle)
+        {
+            $arrStyle = array();
+            unset($attributes);
+            if (is_array($_arrStyle)) {
+                foreach ($_arrStyle as $attribute => $value) {
+                    $attributes .= $attributes ? " " : "";
+                    $attributes .= $attribute.": ".$value.";";
+                }
+                $arrStyle = array("style" => $attributes);
+            }
+            return cUtils::setArrAttribute($_component, $arrStyle);
+        }
+
+        public function setArrAttribute ($_component, $_arrAttribute)
+        {
+            if (is_array($_arrAttribute)) {
+                foreach ($_arrAttribute as $attribute => $value) {
+                    $_component->setAttribute($attribute, $value);
+                }
+            }
+            return $_component;
+        }
+		
+		public function __FF($_field, $_arrAttributesCss, $_arrAttributesHtml = null)
+        {
+            if(is_array($_arrAttributesCss)){
+                foreach ($_arrAttributesCss as $attribute => $value) {
+                    $style .= $attribute.": ".$value."; ";
+                }
+                $_field->setAttribute("style", $style);
+            }
+            unset($attribute, $value);
+            if(is_array($_arrAttributesHtml)){
+                foreach ($_arrAttributesHtml as $attribute => $value) {
+                    $_field->setAttribute($attribute, $value);
+                }
+            }
+            unset($attribute, $value);
+            return $_field;
+			
+		}
+    }
+    
+?>

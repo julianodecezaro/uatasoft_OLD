@@ -1,0 +1,8 @@
+<?php
+
+	class TiE_View_Exception extends TiE_Exception
+	{
+				
+	}
+
+?>

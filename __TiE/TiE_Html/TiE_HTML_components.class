@@ -1,0 +1,2216 @@
+<?php
+    
+	GLOBAL $_PATH;
+    require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_essencials.class";
+    require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_utils.class";
+
+   /**
+    * Classe que abstrai a inserção de um elemento FORM do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class form extends element
+    {
+       /**
+        * Método construtor da classe form.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("method", "post");
+            parent::__construct('form', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um texto simples em HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class text extends element
+    {
+       /**
+        * Método construtor da classe text.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_text Texto a ser exibido na tela.
+        * @return void
+        */
+        public function __construct ($_text, $_attributes = "")
+        {
+            //$this->text = $_text;
+            parent::__construct('span', $_attributes);
+            $this->innerHTML($_text);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento SPAN do HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class span extends element
+    {
+       /**
+        * Método construtor da classe span.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('span', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento DIV do HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class div extends element
+    {
+       /**
+        * Método construtor da classe div.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('div', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento TABLE do HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class table extends element
+    {
+       /**
+        * Método construtor da classe table.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('table', $_attributes);			
+        }
+
+       /**
+        * Método que monta e retorna uma linha de uma tabela HTML.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_id Atributo id do elemento.
+        * @return Object Linha de uma tabela HTML
+        */
+        public function row ($_id = "")
+        {
+            $this->r++;
+            $row = new tr($_id);
+            $this->row[$this->r] = $row;
+            return $row;
+        }
+
+       /**
+        * Método que monta e retorna uma linha de uma tabela HTML.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param Object $_element Elemento a ser adicionado na coluna.
+        * @param Integer $_colspan Atributo colspan da coluna.
+        * @param Integer $_rowspan Atributo rowspan da coluna.
+        * @return Object Coluna de uma tabela HTML
+        */
+        public function col ($_element, $_colspan = 1, $_rowspan = 1, $_class = "")
+        {
+            $col = new td('col');
+            $col->append($_element, $_colspan, $_rowspan, $_class);
+            $this->row[$this->r]->cols[] = $col;
+            return $col;
+        }
+
+       /**
+        * Método que retorna a String HTML do elemento.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @return void
+        */
+        public function getHTML ()
+        {
+            $tbody = new tbody();
+            if (is_array($this->row)) {
+                foreach ($this->row as $row) {
+                    foreach($row->cols as $cols) {
+                        $row->append($cols);
+                        unset($cols);
+                    }
+                    $tbody->append($row);
+                    unset($row);
+                }
+                $this->append($tbody);
+            }
+            return parent::getHTML();
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento TBODY do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class tbody extends element
+    {
+       /**
+        * Método construtor da classe tbody.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_id Atributo id do elemento.
+        * @return void
+        */
+        public function __construct ()
+        {
+            parent::__construct('tbody', null);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento TR do HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class tr extends element
+    {
+       /**
+        * Método construtor da classe tr.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('tr', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento TD do HTML.
+    * Data de criação: 25/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class td extends element
+    {
+       /**
+        * Método construtor da classe td.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('td', $_attributes);
+        }
+
+       /**
+        * Método que adiciona um elemento dentro do elemento TD, sobrescrevendo o método append da classe pai para suportar mais atributos.
+        * Data de criação: 25/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param Object $_element Elemento a ser adicionado na coluna.
+        * @param Integer $_colspan Atributo colspan da coluna.
+        * @param Integer $_rowspan Atributo rowspan da coluna.
+        * @return void
+        */
+        public function append ($_element, $_colspan = 1, $_rowspan = 1, $_class = "")
+        {
+            parent::append($_element);
+            $this->setAttribute("colspan", $_colspan);
+            $this->setAttribute("rowspan", $_rowspan);
+            $this->setAttribute("class", $_class);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento BUTTON do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class button extends element
+    {
+       /**
+        * Método construtor da classe button.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "button");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento SUBMIT do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class submit extends element
+    {
+       /**
+        * Método construtor da classe submit.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "submit");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento INPUT TEXT do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class inputText extends element
+    {
+       /**
+        * Método construtor da classe textfield.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "text");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT TEXT do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class inputPassword extends element
+    {
+       /**
+        * Método construtor da classe textfield.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "password");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento HIDDEN do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class hidden extends element
+    {
+       /**
+        * Método construtor da classe hidden.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "hidden");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+
+    /**
+    * Classe que abstrai a inserção de um elemento SELECT do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class select extends element
+    {
+       /**
+        * Método construtor da classe select.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @param Array $_arrValues Array de valores [option].
+        * @return void
+        */
+        public function __construct ($_attributes = "", $_arrValues = "", $_default = "")
+        {
+			if($_default) {
+				$arrValues[""] = $_default;
+				foreach($_arrValues as $id=>$value) {
+					$arrValues[$id] = $value;
+				}
+			}else {
+				$arrValues = $_arrValues;
+			}
+            parent::__construct('select', $_attributes);
+            $this->id = $this->params->id;
+            $this->arrValues = $arrValues;            
+        }
+       
+       /**
+        * Método que retorna a String HTML do elemento.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @return void
+        */
+        public function getHTML()
+        {
+			if (is_array($this->arrValues)) {
+                foreach ($this->arrValues as $value => $label) {
+					$this->append(new option("{".($this->params->value == $value ? "selected: selected, " : "")." value: $value, label: $label}"));
+                }
+            }
+            return parent::getHTML();
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento OPTION do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class option extends element
+    {
+       /**
+        * Método construtor da classe option.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('option', $_attributes);
+            $this->innerHTML($this->params->label);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento TEXTAREA do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class textarea extends element
+    {
+       /**
+        * Método construtor da classe textarea.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('textarea', $_attributes);
+        }
+    }
+
+    /**
+    * Classe que abstrai a inserção de um elemento TEXTAREA do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class img extends element
+    {
+       /**
+        * Método construtor da classe textarea.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('img', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento RADIO do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class radio extends element
+    {
+       /**
+        * Método construtor da classe radio.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "radio");
+            parent::__construct('input', $_attributes, false);
+            $this->innerHTML($this->params->label);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento CHECKBOX do HTML.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class checkbox extends element
+    {
+       /**
+        * Método construtor da classe checkbox.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "checkbox");
+            parent::__construct('input', $_attributes, false);
+            $this->innerHTML($this->params->label);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento UL do HTML.
+    * Data de criação: 29/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class ul extends element
+    {
+       /**
+        * Método construtor da classe ul.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('ul', $_attributes);
+        }
+    }
+
+    /**
+    * Classe que abstrai a inserção de um elemento OL do HTML.
+    * Data de criação: 29/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class ol extends element
+    {
+       /**
+        * Método construtor da classe ol.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('ol', $_attributes);
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento LI do HTML.
+    * Data de criação: 29/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class li extends element
+    {
+       /**
+        * Método construtor da classe li.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('li', $_attributes);
+            $this->innerHTML($this->params->label);
+        }
+    }
+
+    /**
+    * Classe que abstrai a inserção de um elemento A do HTML.
+    * Data de criação: 29/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class a extends element
+    {
+       /**
+        * Método construtor da classe a.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('a', $_attributes);
+            $this->innerHTML($this->params->label);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H1 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h1 extends element
+    {
+       /**
+        * Método construtor da classe h1.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h1', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H2 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h2 extends element
+    {
+       /**
+        * Método construtor da classe h2.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h2', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H3 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h3 extends element
+    {
+       /**
+        * Método construtor da classe h3.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h3', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H4 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h4 extends element
+    {
+       /**
+        * Método construtor da classe h4.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h4', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H5 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h5 extends element
+    {
+       /**
+        * Método construtor da classe h5.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h5', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento H6 do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class h6 extends element
+    {
+       /**
+        * Método construtor da classe h6.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('h6', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento AUDIO do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class audio extends element
+    {
+       /**
+        * Método construtor da classe audio.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('audio', $_attributes);
+        }
+    }
+
+	/**
+    * Classe que abstrai a inserção de um elemento VIDEO do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class video extends element
+    {
+       /**
+        * Método construtor da classe video.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('video', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento SECTION do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class section extends element
+    {
+       /**
+        * Método construtor da classe section.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('section', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento ARTICLE do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class article extends element
+    {
+       /**
+        * Método construtor da classe article.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('article', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento ASIDE do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class aside extends element
+    {
+       /**
+        * Método construtor da classe aside.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('aside', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento HGROUP do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class hgroup extends element
+    {
+       /**
+        * Método construtor da classe hgroup.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('hgroup', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento HEADER do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class header extends element
+    {
+       /**
+        * Método construtor da classe header.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('header', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento FOOTER do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class footer extends element
+    {
+       /**
+        * Método construtor da classe footer.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('footer', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento NAV do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class nav extends element
+    {
+       /**
+        * Método construtor da classe nav.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('nav', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento FIGURE do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class figure extends element
+    {
+       /**
+        * Método construtor da classe figure.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('figure', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento FIGCAPTION do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class figcaption extends element
+    {
+       /**
+        * Método construtor da classe figcaption.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('figcaption', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento TRACK do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class track extends element
+    {
+       /**
+        * Método construtor da classe track.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('track', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento EMBED do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class embed extends element
+    {
+       /**
+        * Método construtor da classe embed.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('embed', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento PROGRESS do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class progress extends element
+    {
+       /**
+        * Método construtor da classe progress.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('progress', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento METER do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class meter extends element
+    {
+       /**
+        * Método construtor da classe meter.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('meter', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento TIME do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class time_ extends element
+    {
+       /**
+        * Método construtor da classe time.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('time', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento DATA do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class data extends element
+    {
+       /**
+        * Método construtor da classe data.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('data', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento DIALOG do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class dialog extends element
+    {
+       /**
+        * Método construtor da classe dialog.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('dialog', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento RUBY do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class ruby extends element
+    {
+       /**
+        * Método construtor da classe ruby.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('ruby', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento RT do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class rt extends element
+    {
+       /**
+        * Método construtor da classe rt.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('rt', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento RP do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class rp extends element
+    {
+       /**
+        * Método construtor da classe rp.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('rp', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento MARK do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class mark extends element
+    {
+       /**
+        * Método construtor da classe mark.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('mark', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento BDI do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class bdi extends element
+    {
+       /**
+        * Método construtor da classe bdi.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('bdi', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento WBR do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class wbr extends element
+    {
+       /**
+        * Método construtor da classe wbr.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('wbr', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento CANVAS do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class canvas extends element
+    {
+       /**
+        * Método construtor da classe canvas.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('canvas', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento COMMAND do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class command extends element
+    {
+       /**
+        * Método construtor da classe command.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('command', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento DETAILS do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class details extends element
+    {
+       /**
+        * Método construtor da classe details.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('details', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento DATALIST do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class datalist extends element
+    {
+       /**
+        * Método construtor da classe datalist.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('datalist', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento KEYGEN do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class keygen extends element
+    {
+       /**
+        * Método construtor da classe keygen.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('keygen', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento OUTPUT do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class output extends element
+    {
+       /**
+        * Método construtor da classe output.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            parent::__construct('output', $_attributes);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=tel do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class tel extends element
+    {
+       /**
+        * Método construtor da classe tel.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "tel");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=search do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class search extends element
+    {
+       /**
+        * Método construtor da classe search.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "search");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=url do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class url extends element
+    {
+       /**
+        * Método construtor da classe url.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "url");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=email do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class email extends element
+    {
+       /**
+        * Método construtor da classe email.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "email");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=datetime do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class datetime_ extends element
+    {
+       /**
+        * Método construtor da classe datetime.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "datetime");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=date do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class date_ extends element
+    {
+       /**
+        * Método construtor da classe date.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "date");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=month do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class month extends element
+    {
+       /**
+        * Método construtor da classe month.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "month");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=month do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class week extends element
+    {
+       /**
+        * Método construtor da classe month.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "week");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=time do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class itime extends element
+    {
+       /**
+        * Método construtor da classe time.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "time");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=datetime-local do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class datetime_local extends element
+    {
+       /**
+        * Método construtor da classe datetime-local.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "datetime-local");
+            parent::__construct('input', $_attributes, false);
+        }
+    }	
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=number do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class number extends element
+    {
+       /**
+        * Método construtor da classe number.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "number");
+            parent::__construct('input', $_attributes, false);
+        }
+    }
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=range do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class range extends element
+    {
+       /**
+        * Método construtor da classe range.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "range");
+            parent::__construct('input', $_attributes, false);
+        }
+    }	
+	
+	/**
+    * Classe que abstrai a inserção de um elemento INPUT type=color do HTML.
+    * Data de criação: 02/03/2013
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    *
+    */
+    class color extends element
+    {
+       /**
+        * Método construtor da classe color.
+        * Data de criação: 02/03/2013
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Atributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "")
+        {
+            $this->setAttribute("type", "color");
+            parent::__construct('input', $_attributes, false);
+        }
+    }	
+	
+    /**
+    * Classe que abstrai a criação de uma lista [UL ou OL].
+    * Data de criação: 29/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class mList extends element
+    {
+       /**
+        * Método construtor da classe ul.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_attributes Attributos do elemento.
+        * @return void
+        */
+        public function __construct ($_attributes = "", $_arrValues = "", $_type = "ul")
+        {
+            parent::__construct((strtolower(trim($_type)) != "ol" ? "ul" : "ol"), $_attributes);
+            $this->arrValues = $_arrValues;
+        }
+
+       /**
+        * Método que retorna a String HTML do elemento.
+        * Data de criação: 29/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @return void
+        */
+        public function getHTML()
+        {
+            if (is_array($this->arrValues)) {
+                foreach ($this->arrValues as $label) {
+                    $this->append(new li("{label: $label}"));
+                }
+            }
+            return parent::getHTML();
+        }
+    }
+
+   /**
+    * Classe que abstrai a inserção de um elemento LINK do HTML para chamada de folha de estilo.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class style extends element
+    {
+       /**
+        * Método construtor da classe link.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_href Caminho do arquivo css.
+        * @return void
+        */
+        public function __construct ($_href = "")
+        {
+            parent::__construct('link', "{type: text/css, rel: stylesheet, media: screen, href: ".Converter::commaToAttributeComma($_href)."}", false);
+        }
+    }
+
+    /**
+    * Classe que abstrai a inserção de um elemento SCRIPT do HTML para chamada de arquivos de script.
+    * Data de criação: 28/03/2011
+    * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+    *
+    * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+    * @version 1.0.0
+    */
+    class script extends element
+    {
+       /**
+        * Método construtor da classe link.
+        * Data de criação: 28/03/2011
+        * Histórico de Manutenções: (Data, Autor, Descrição da Alteração)
+        *
+        * @author Juliano S. De Cezaro <juliano_cezaro@uniritter.edu.br>
+        * @version 1.0.0
+        *
+        * @param String $_src Caminho do arquivo js.
+        * @return void
+        */
+        public function __construct ($_src = "")
+        {
+            parent::__construct('script', "{type: text/javascript, src: ".Converter::commaToAttributeComma($_src)."}");
+        }
+    }
+
+?>
