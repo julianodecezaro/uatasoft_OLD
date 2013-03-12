@@ -11,9 +11,6 @@ require_once "View/TesteClass_View.class";
 require_once "Model/Table/Usuario_Table.class";
 require_once "Model/Table/Teste_Table.class";
 
-//echo "aaqio";
-//echo phpinfo();
-
 $app = new TiE_Program(1);
 $app->setTitle("HHH");
 $app->setClass("TesteClass_View");
