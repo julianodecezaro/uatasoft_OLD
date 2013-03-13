@@ -2,6 +2,23 @@
 
 class TiE_Query
 {
+	
+	public function __construct(&$_db)
+	{
+		$this->db = $_db;
+	}
+
+	public function execute()	
+	{
+		$db = new TiE_Db($this->db);
+		$exe = $db->execute($this->get());
+		if(!$db->error){
+			return $exe;
+		}else {
+			$this->error = $db->error;
+			return false;
+		}
+	}
 
 	public function cast($_column)
 	{
@@ -10,6 +27,7 @@ class TiE_Query
 			$in = "(";
 			foreach ($_column->value as $key => $value) {
 				$i++;
+				$c = (object)null;
 				$c->type = $_column->type;
 				$c->value = $value;
 				$in .= TiE_Query::cast($c);

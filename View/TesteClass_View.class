@@ -19,7 +19,7 @@
 			$clause = $u->setValue(array("usua_id"=>1, "usua_nome"=>"Juliano", "usua_bla" => array(1, 2, 5, 75), "usua_tche"=>array("ronaldo", "maria")), 
 				array("usua_bla"));
 			
-			$q = new TiE_Query();
+			$q = new TiE_Query($this->db);
 			$q->select(array("usua_id", "usua_nome")) .
 			$q->from($u) . 
 			$q->leftjoin($t) . 
@@ -29,20 +29,20 @@
 			$q->outerjoin($t) . 
 			$q->where($clause);
 
-			dump(PHP_EOL.$q->get());
+			dump(PHP_EOL.$q->execute());
 
-			$q2 = new TiE_Query();
+			$q2 = new TiE_Query($this->db);
 			$q2->update($u);
 			$q2->set($clause);
 			$q2->where($clause);
 
-			dump(PHP_EOL.$q2->get());
+			dump(PHP_EOL.$q2->execute());
 
-			$q3 = new TiE_Query();
+			$q3 = new TiE_Query($this->db);
 			$q3->insert($u);
 			$q3->values($clause);
 
-			dump(PHP_EOL.$q3->get());
+			dump(PHP_EOL.$q3->execute());
 			//$u = new Usuario_Table($this->db);
 			//$u->get();
 		}

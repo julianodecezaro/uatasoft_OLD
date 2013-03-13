@@ -17,13 +17,17 @@ class TiE_Db
 	
 	public function execute($_sql)
 	{
-		return pg_query($this->conn->id, $_sql);
+		$query = @pg_query($this->conn->id, $_sql);
+		if(!$query){
+			$this->error = @pg_last_error($this->conn->id);
+		}
+		return $query;
 	}
 	
 	public function getMatrix($_sql)
 	{
 		$q = $this->execute($_sql);
-		return pg_fetch_all($q);
+		return @pg_fetch_all($q);
 	}
 	
 	public function convertConstraints($_str)
@@ -122,8 +126,11 @@ class TiE_Db
 
 	public function setFk($_obj)
 	{
-		$this->__fk->{$_obj->fk_name} = $_obj;
-		$this->__fk->{$_obj->reltable} = $_obj->fk_name;
+		$this->__fk = (object) null;
+		if($_obj->fk_name){
+			$this->__fk->{$_obj->fk_name} = $_obj;
+			$this->__fk->{$_obj->reltable} = $_obj->fk_name;
+		}
 	}	
 
 	public function getFks()
@@ -144,6 +151,7 @@ class TiE_Db
 	public function getColumns()
 	{
 		$cols = $this->_getColumns();
+		$colsObj = (object)null;
 		if(is_array($cols) && count($cols) > 0){
 			foreach ($cols as $key => $value) {
 				$colsObj->{$value->name} = $value;
