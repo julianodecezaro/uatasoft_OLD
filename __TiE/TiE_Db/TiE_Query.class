@@ -57,6 +57,7 @@ class TiE_Query
 
 	public function select($_cols)
 	{
+		$this->__selecting = true;
 		$numCols = count($_cols);
 		$sql = "SELECT ";
 		if (is_array($_cols) && $numCols > 0){			
@@ -68,12 +69,13 @@ class TiE_Query
 		}else {
 			$sql = "* ";
 		}
-		return $sql.PHP_EOL;
+		$this->__sql .= $sql.PHP_EOL;
 	}
 
-	public function from($_table = "")
+	public function from($_table)
 	{
-		return "FROM ".($_table ? $_table.PHP_EOL : "");	
+		$this->__table = $_table;
+		$this->__sql .= "FROM ".$_table->getTable().PHP_EOL;	
 	}
 
 	public function where($_cols)
@@ -81,17 +83,20 @@ class TiE_Query
 		$_cols = (array)$_cols;
 
 		//dump($_cols);
+		if($this->__updating || $this->__inserting){
+			$_cols = TiE_Query::filter(1, $this->__table, $_cols);
+		}
 
 		$numCols = count($_cols);
 		$sql = "WHERE ";
 		if (is_array($_cols) && $numCols > 0){
 			foreach ($_cols as $key => $column) {
 				$i++;
-				$sql .= $key.(is_array($column->value)?" in ":" = ").TiE_Query::cast($column);
-				if($i < $numCols) $sql .= " AND ";
+				$sql .= $key.(is_array($column->value) ? ($column->not ? " not" : "")." in ": ($column->not ? " !" : " ")."= ").TiE_Query::cast($column);
+				if($i < $numCols) $sql .= " AND ";				
 			}			
 		}
-		return $sql.PHP_EOL;
+		$this->__sql .= $sql.PHP_EOL;
 	}
 
 	public function orderby()
@@ -116,7 +121,7 @@ class TiE_Query
 
 	public function joinByFk($_t1, $_t2)
 	{
-		$fks = $_t1->getFkName($_t1->getTable());
+		$fks = $_t2->getFkName($_t1->getTable());
 		$w = 1;
 		if(!isset($fks)){
 			$fks = $_t1->getFkName($_t2->getTable());
@@ -135,52 +140,131 @@ class TiE_Query
 				if($i < $num) $sql .= " AND ";
 			}
 		}
-		return "ON(".$sql.")".PHP_EOL;
+		$this->__sql .= "ON(".$sql.")".PHP_EOL;
 	}
 
-	public function join()
+	public function join($_table)
 	{
-		return $_t1->getTable()." JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+		$sql = "\tJOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;
+		$this->__sql .= $sql;
 	}
 
-	public function leftjoin($_t1, $_t2)
+	public function leftjoin($_table)
 	{
-		return $_t1->getTable()." LEFT JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+		$sql = "\tLEFT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;
+		$this->__sql .= $sql;
 	}
 
-	public function rightjoin()
+	public function rightjoin($_table)
 	{
-		return $_t1->getTable()." RIGHT JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+		$sql = "\tRIGHT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;
+		$this->__sql .= $sql;
 	}
 
-	public function innerjoin()
+	public function innerjoin($_table)
 	{
-		return $_t1->getTable()." INNER JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+		$sql = "\tINNER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;
+		$this->__sql .= $sql;
 	}
 
-	public function outerjoin()
+	public function outerjoin($_table)
 	{
-		return $_t1->getTable()." OUTER JOIN ".$_t2->getTable()." ".TiE_Query::joinByFk($_t1, $_t2);
+		$sql = "\tOUTER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;
+		$this->__sql .= $sql;
 	}
 
-	public function update()
+	public function update($_table)
 	{
-
+		$this->__updating = true;
+		$sql = "UPDATE ".$_table->getTable();
+		$this->__table = $_table;
+		$this->__sql .= $sql.PHP_EOL;
 	}
 
-	public function set()
+	public function set($_cols)
 	{
+		$_cols = (array)$_cols;
+		$_cols = TiE_Query::filter(2, $this->__table, $_cols);	
 
+		$numCols = count($_cols);
+		$sql = "SET ";
+		if (is_array($_cols) && $numCols > 0){
+			foreach ($_cols as $key => $column) {
+				$i++;
+				$sql .= $key." = ".TiE_Query::cast($column);
+				if($i < $numCols) $sql .= ", ";
+			}
+		}
+		$this->__sql .= $sql.PHP_EOL;
 	}
 
-	public function insert()
+	public function insert($_table)
 	{
-
+		$this->__inserting = true;
+		$sql = "INSERT INTO ".$_table->getTable();
+		$this->__table = $_table;
+		$this->__sql .= $sql.PHP_EOL;
 	}
 
-	public function values()
+	public function values($_cols)
 	{
+		$_cols = (array)$_cols;
+		$numCols = count($_cols);
+		$sql = "(";
+		if (is_array($_cols) && $numCols > 0){
+			foreach ($_cols as $key => $column) {
+				$i++;
+				$sql .= $key;
+				if($i < $numCols) $sql .= ", ";
+			}			
+		}
+		$sql .= ")".PHP_EOL;
+		$i = 0;
+		$sql .= "VALUES(";
+		if (is_array($_cols) && $numCols > 0){
+			foreach ($_cols as $key => $column) {
+				$i++;
+				$sql .= TiE_Query::cast($column);
+				if($i < $numCols) $sql .= ", ";
+			}			
+		}
+		$sql .= ")";
+		$this->__sql .= $sql.PHP_EOL;
+	}
 
+	public function get()
+	{
+		return $this->__sql;
+	}
+
+	public function filter($_type, $_table, $_cols)
+	{
+		$pks = $_table->getPk();
+		if (is_array($_cols) && count($_cols) > 0){
+			foreach ($_cols as $key => $column) {
+				switch ($_type) {
+					case 1:
+						if(in_array($key, $pks)){
+							$_cols2[$key] = $column;
+						}
+						break;
+					case 2:
+						if(!in_array($key, $pks)){
+							$_cols2[$key] = $column;
+						}
+						break;
+					default:					
+						$_cols2[$key] = $column;
+						break;
+				}				
+			}
+		}
+		return $_cols2;
 	}
 
 }

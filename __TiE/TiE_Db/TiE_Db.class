@@ -107,12 +107,13 @@ class TiE_Db
 	
 	public function setPk($_pk_name, $_arrPks)
 	{
+		$this->__pk_name = $_pk_name;
 		if(is_array($_arrPks)){
 			foreach($_arrPks as $column){
-				$this->__pk[$_pk_name][] = $column;
+				$this->__pk[] = $column;				
 			}
 		}
-	}	
+	}
 
 	public function getPk()
 	{
@@ -152,13 +153,14 @@ class TiE_Db
 		return $colsObj;
 	}
 
-	public function setValue($_arr)
+	public function setValue($_arr, $_arrNot = null)
 	{
 		$cols = $this->getColumns();
 		if(is_array($_arr) && count($_arr) > 0){
 			foreach ($_arr as $key => $value) {
 				if(isset($cols->$key)){
 					$cols->$key->value = $value;
+					$cols->$key->not = is_array($_arrNot) && in_array($key, $_arrNot);
 				}else{
 					$cols->$key->type = 'error';
 					$cols->$key->value = '@ERROR::'. strtoupper($key) .'::NOT_DEFINED@';
@@ -177,8 +179,8 @@ class TiE_Db
 	public function getFk($_fkname)
 	{
 		$fks = $this->getFks();
-		return $fks->{$_fkname};
-	}
+		return isset($fks->{$_fkname}) ? $fks->{$_fkname} : null;
+	}	
 
 }
 

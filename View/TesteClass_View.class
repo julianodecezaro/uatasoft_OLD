@@ -12,19 +12,37 @@
 		
 		public function __ini()
 		{
-			$u = new Usuario_Table($this->db);			
+			$u = new Usuario_Table($this->db);
 			$t = new Teste_Table($this->db);
 
 			//dump($uObj->getColumns());			
-			$clause = $u->setValue(array("usua_id"=>1, "usua_nome"=>"Juliano", "usua_bla" => array(1, 2, 5, 75), "usua_tche"=>array("ronaldo", "maria")));
+			$clause = $u->setValue(array("usua_id"=>1, "usua_nome"=>"Juliano", "usua_bla" => array(1, 2, 5, 75), "usua_tche"=>array("ronaldo", "maria")), 
+				array("usua_bla"));
 			
-			dump(PHP_EOL .
-				TiE_Query::select(array("usua_id", "usua_nome")) .
-				TiE_Query::from() . 
-				TiE_Query::leftjoin($u, $t) . 
-				TiE_Query::where($clause)
-				);
+			$q = new TiE_Query();
+			$q->select(array("usua_id", "usua_nome")) .
+			$q->from($u) . 
+			$q->leftjoin($t) . 
+			$q->join($u) . 
+			$q->rightjoin($t) . 
+			$q->innerjoin($u) . 
+			$q->outerjoin($t) . 
+			$q->where($clause);
 
+			dump(PHP_EOL.$q->get());
+
+			$q2 = new TiE_Query();
+			$q2->update($u);
+			$q2->set($clause);
+			$q2->where($clause);
+
+			dump(PHP_EOL.$q2->get());
+
+			$q3 = new TiE_Query();
+			$q3->insert($u);
+			$q3->values($clause);
+
+			dump(PHP_EOL.$q3->get());
 			//$u = new Usuario_Table($this->db);
 			//$u->get();
 		}
