@@ -11,11 +11,17 @@ class TiE_Query
 	public function execute()	
 	{
 		$db = new TiE_Db($this->db);
-		$exe = $db->execute($this->get());
-		if(!$db->error){
+		if($this->__selecting){
+			$exe = $db->getMatrix($this->get());
+		}else{
+			$exe = $db->execute($this->get());
+		}
+		if(!$db->error){			
+
 			return $exe;
 		}else {
 			$this->error = $db->error;
+			dump($this->error);
 			return false;
 		}
 	}
@@ -158,50 +164,44 @@ class TiE_Query
 				if($i < $num) $sql .= " AND ";
 			}
 		}
-		$this->__sql .= "ON(".$sql.")".PHP_EOL;
+		return "ON(".$sql.")".PHP_EOL;
 	}
 
 	public function join($_table)
 	{
-		$sql = "\tJOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
-		$this->__table = $_table;
-		$this->__sql .= $sql;
+		$this->__sql .= "\tJOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__table = $_table;		
 	}
 
 	public function leftjoin($_table)
 	{
-		$sql = "\tLEFT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__sql .= "\tLEFT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
 		$this->__table = $_table;
-		$this->__sql .= $sql;
 	}
 
 	public function rightjoin($_table)
 	{
-		$sql = "\tRIGHT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__sql .= "\tRIGHT JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
 		$this->__table = $_table;
-		$this->__sql .= $sql;
 	}
 
 	public function innerjoin($_table)
 	{
-		$sql = "\tINNER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__sql .= "\tINNER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
 		$this->__table = $_table;
-		$this->__sql .= $sql;
 	}
 
 	public function outerjoin($_table)
 	{
-		$sql = "\tOUTER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
+		$this->__sql .= "\tOUTER JOIN ".$_table->getTable()." ".TiE_Query::joinByFk($this->__table, $_table);
 		$this->__table = $_table;
-		$this->__sql .= $sql;
 	}
 
 	public function update($_table)
 	{
 		$this->__updating = true;
-		$sql = "UPDATE ".$_table->getTable();
+		$this->__sql .= "UPDATE ".$_table->getTable();
 		$this->__table = $_table;
-		$this->__sql .= $sql.PHP_EOL;
 	}
 
 	public function set($_cols)
