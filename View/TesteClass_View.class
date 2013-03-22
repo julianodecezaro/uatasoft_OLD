@@ -32,6 +32,10 @@
 			dump(PHP_EOL.$q->get());
 			dump($q->execute());
 
+			$u = new Usuario_Table($this->db);
+			$u->setValue(array("usua_id"=>1, "usua_login"=>"juliano_cezaro", "pess_id"=>"1"));
+			$u->save();
+
 			/*$q2 = new TiE_Query($this->db);
 			$q2->update($u);
 			$q2->set($clause);

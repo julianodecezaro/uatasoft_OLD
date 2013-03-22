@@ -9,12 +9,11 @@ class Usuario_Table extends TiE_Db
 		#Sequence and Constraints
 		//$this->setSequence("");
 		$this->setPk("pk_usuario", array("usua_id"));
-		$this->setFk(new __fkobj("teste_usuario_fk", "usuario", "teste", array(array("tes1_id_usu", "tes1_id"), array("tes2_id_usu", "tes2_id"))));
+		$this->setFk(new __fkobj("fk_usuario_pessoa", "usuario", "pessoa", array(array("pess_id", "pess_id"))));
 		#Fields
 		$this->setColumn("usua_id", "int4", true);
-		$this->setColumn("usua_nome", "varchar", true);
-		$this->setColumn("usua_bla", "integer", true);
-		$this->setColumn("usua_tche", "varchar", true);
+		$this->setColumn("usua_login", "varchar", true);
+		$this->setColumn("pess_id", "integer", true);
 	}
 	
 }

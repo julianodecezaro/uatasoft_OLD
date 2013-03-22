@@ -2,12 +2,17 @@
 
 class TiE_Query
 {
-	
 	public function __construct(&$_db)
 	{
 		$this->db = $_db;
 	}
 
+	/**
+	 * [execute description]
+	 * @author  Juliano S. De Cezaro <julianodecezaro@gmail.com>
+	 * @version 1.0.0 criado em 17/03/2013 as 17:35
+	 * @return  [type] [description]
+	 */
 	public function execute()	
 	{
 		$db = new TiE_Db($this->db);
@@ -79,7 +84,7 @@ class TiE_Query
 		}
 	}
 
-	public function select($_cols)
+	public function select($_cols = "*")
 	{
 		$this->__selecting = true;
 		$numCols = count($_cols);
@@ -91,7 +96,7 @@ class TiE_Query
 				if($i < $numCols) $sql .= ", ";				
 			}
 		}else {
-			$sql = "* ";
+			$sql .= $_cols;
 		}
 		$this->__sql .= $sql.PHP_EOL;
 	}
@@ -107,7 +112,7 @@ class TiE_Query
 		$_cols = (array)$_cols;
 
 		//dump($_cols);
-		if($this->__updating || $this->__inserting){
+		if($this->__onlypk || $this->__updating || $this->__inserting){
 			$_cols = TiE_Query::filter(1, $this->__table, $_cols);
 		}
 
@@ -200,7 +205,7 @@ class TiE_Query
 	public function update($_table)
 	{
 		$this->__updating = true;
-		$this->__sql .= "UPDATE ".$_table->getTable();
+		$this->__sql .= "UPDATE ".$_table->getTable().PHP_EOL;
 		$this->__table = $_table;
 	}
 

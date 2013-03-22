@@ -27,7 +27,8 @@ class TiE_Db
 	public function getMatrix($_sql)
 	{
 		$q = $this->execute($_sql);
-		return @pg_fetch_all($q);
+		$f = @pg_fetch_all($q);		
+		return $f;
 	}
 	
 	public function convertConstraints($_str)
@@ -97,10 +98,12 @@ class TiE_Db
 	
 	public function setColumn($_name, $_type, $_not_null = false)
 	{
+		$pk = $this->getPk();
 		$col = (object)null;
 		$col->name = $_name;
 		$col->type = $_type;
 		$col->not_null = $_not_null;
+		$col->is_pk = is_array($pk) && in_array($_name, $pk);
 		$this->__column[] = $col;
 	}
 
@@ -138,14 +141,54 @@ class TiE_Db
 		return $this->__fk;
 	}
 	
+	public function exist()
+	{
+		$q = new TiE_Query($this->conn);
+		$q->__onlypk = true;
+		$q->select("true");
+		$q->from($this);
+		$q->where($this->__cols);
+		$matrix = $this->getMatrix($q->__sql);		
+		return (boolean)(is_array($matrix) && count($matrix) > 0);
+	}
+
 	public function get()
 	{
-		
+		$q = new TiE_Query($this->conn);
+		$q->__onlypk = true;
+		$q->select();
+		$q->from($this);
+		$q->where($this->__cols);
+		$matrix = $this->getMatrix($q->__sql);
+		return (object)$matriz[0];
+	}
+
+	public function update()
+	{
+		$q = new TiE_Query($this->conn);
+		$q->update($this);
+		$q->set($this->__cols);
+		$q->where($this->__cols);
+		return $this->execute($q->__sql);
+	}
+
+	public function insert()
+	{
+		$q = new TiE_Query($this->conn);
+		$q->insert($this);
+		$q->values($this->__cols);
+		dump($q->__sql);
+		return $this->execute($q->__sql);
 	}
 
 	public function save()
 	{
-		
+		dump($this->exist());
+		if($this->exist()){
+			return $this->update();
+		}else{
+			return $this->insert();
+		}
 	}
 
 	public function getColumns()
@@ -175,6 +218,7 @@ class TiE_Db
 				}
 			}
 		}
+		$this->__cols = $cols;
 		return $cols;
 	}
 
