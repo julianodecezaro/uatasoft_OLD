@@ -1,5 +1,5 @@
 <?php
-
+	
 	class Index_View extends TiE_View
 	{
 		
@@ -12,9 +12,11 @@
 		
 		public function __ini()
 		{
-			
+			GLOBAL $_PW;
+			$img = new img("{ src : ".$_PW['IMAGES']."logo.png }");
+			$img->generate();
 		}
 		
 	}
-
+	
 ?>

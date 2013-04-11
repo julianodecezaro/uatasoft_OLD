@@ -10,10 +10,10 @@ class TiE_Db
 
 	public function setUp(){}
 
-	public function setEntity($_entity)
+	/*public function setEntity($_entity)
 	{
 		$this->entity = $_entity;	
-	}	
+	}*/
 	
 	public function execute($_sql)
 	{
@@ -86,6 +86,16 @@ class TiE_Db
 		//dump($arr);
 	}
 	
+	public function setSequenceName($_sequenceName)
+	{
+		$this->sequenceName = $_sequenceName;
+	}
+
+	public function getSequenceName()
+	{
+		return $this->sequenceName;
+	}
+
 	public function setTable($_table)
 	{
 		$this->__table = $_table;
@@ -140,16 +150,43 @@ class TiE_Db
 	{
 		return $this->__fk;
 	}
+
+	public function getNextSequence($_sequenceName)
+	{
+		$sql = $q->select("last_value + increment_by").
+			   "FROM ".$_sequenceName;
+		dump($sql);
+	}
 	
+	public function pkSet()
+	{
+		$set = false;
+		$cols = (array)$this->__cols;
+		if(is_array($cols) && count($cols)>0){
+			foreach($cols as $id => $col){
+				if($col->is_pk){
+					if(isset($col->value)){
+						$set = true;
+					}
+				}
+			}
+		}
+		return $set;
+	}
+
 	public function exist()
 	{
-		$q = new TiE_Query($this->conn);
-		$q->__onlypk = true;
-		$q->select("true");
-		$q->from($this);
-		$q->where($this->__cols);
-		$matrix = $this->getMatrix($q->__sql);		
-		return (boolean)(is_array($matrix) && count($matrix) > 0);
+		if($this->pkSet()){
+			$q = new TiE_Query($this->conn);
+			$q->__onlypk = true;
+			$q->select("true");
+			$q->from($this);
+			$q->where($this->__cols);
+			$matrix = $this->getMatrix($q->__sql);		
+			return (boolean)(is_array($matrix) && count($matrix) > 0);
+		}else {
+			return false;
+		}
 	}
 
 	public function get()
@@ -173,7 +210,11 @@ class TiE_Db
 	}
 
 	public function insert()
-	{
+	{	
+		//if()
+			//$ns = $this->getNextSequence($this->getSequenceName());
+
+
 		$q = new TiE_Query($this->conn);
 		$q->insert($this);
 		$q->values($this->__cols);
@@ -183,7 +224,6 @@ class TiE_Db
 
 	public function save()
 	{
-		dump($this->exist());
 		if($this->exist()){
 			return $this->update();
 		}else{
@@ -204,7 +244,7 @@ class TiE_Db
 		return $colsObj;
 	}
 
-	public function setValue($_arr, $_arrNot = null)
+	public function set($_arr, $_arrNot = null)
 	{
 		$cols = $this->getColumns();
 		if(is_array($_arr) && count($_arr) > 0){

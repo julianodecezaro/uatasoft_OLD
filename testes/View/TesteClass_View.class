@@ -1,0 +1,57 @@
+<?php
+	
+	class TesteClass_View extends TiE_View
+	{
+		
+		public function __construct(&$_db)
+		{
+			//$this->ErrorCreator_Controller = new ErrorCreator_Controller($this);
+			$this->db = $_db;
+			$this->controller = new TesteClass_Controller($this);
+		}
+		
+		public function __ini()
+		{
+			$u = new Usuario_Table($this->db);
+			$t = new Teste_Table($this->db);
+
+			//dump($uObj->getColumns());			
+			$clause = $u->set(array("usua_id"=>1, "usua_nome"=>"Juliano", "usua_bla" => array(1, 2, 5, 75), "usua_tche"=>array("ronaldo", "maria")), 
+				array("usua_bla"));
+			
+			$q = new TiE_Query($this->db);
+			$q->select(array("usua_id", "usua_login")) .
+			$q->from($u);
+			//$q->leftjoin($t) . 
+			//$q->join($u) . 
+			//$q->rightjoin($t) . 
+			//$q->innerjoin($u) . 
+			//$q->outerjoin($t) . 
+			//$q->where($clause);
+
+			//dump(PHP_EOL.$q->get());
+			//dump($q->execute());
+
+			$u = new Usuario_Table($this->db);
+			$u->set(array("usua_login"=>"juliano_cezaro", "pess_id"=>"1"));
+			$u->save();
+
+			/*$q2 = new TiE_Query($this->db);
+			$q2->update($u);
+			$q2->set($clause);
+			$q2->where($clause);
+
+			dump(PHP_EOL.$q2->execute());
+
+			$q3 = new TiE_Query($this->db);
+			$q3->insert($u);
+			$q3->values($clause);
+
+			dump(PHP_EOL.$q3->execute());
+			//$u = new Usuario_Table($this->db);
+			//$u->get();*/
+		}
+		
+	}
+	
+?>

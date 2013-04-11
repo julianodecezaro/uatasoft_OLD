@@ -17,6 +17,6 @@
 	require_once $_PATH['FRAMEWORK']['EXCEPTIONS']."TiE_Exception.class";
 	require_once $_PATH['FRAMEWORK']['ERROR']."TiE_Error.class";
 	require_once $_PATH['FRAMEWORK']['ERROR']."TiE_Log.class";
-	require_once $_PATH['FRAMEWORK']['FILE']."TiE_File.class";
+	require_once $_PATH['FRAMEWORK']['FILE']."TiE_File.class";	
 
 ?>

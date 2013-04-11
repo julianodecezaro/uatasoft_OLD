@@ -1,0 +1,21 @@
+<?php
+
+class Usuario_Table extends TiE_Db
+{
+	public function setUp()
+	{
+		#Table
+		$this->setTable("usuario");
+		#Sequence and Constraints
+		$this->setSequenceName("usuario_usua_id_seq");
+		$this->setPk("pk_usuario", array("usua_id"));
+		$this->setFk(new __fkobj("fk_usuario_pessoa", "usuario", "pessoa", array(array("pess_id", "pess_id"))));
+		#Fields
+		$this->setColumn("usua_id", "int4", true);
+		$this->setColumn("usua_login", "varchar", true);
+		$this->setColumn("pess_id", "integer", true);
+	}
+	
+}
+
+?>

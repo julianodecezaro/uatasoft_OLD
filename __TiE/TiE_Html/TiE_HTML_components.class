@@ -590,7 +590,7 @@
         */
         public function __construct ($_attributes = "")
         {
-            parent::__construct('img', $_attributes);
+            parent::__construct('img', $_attributes, false);
         }
     }
 

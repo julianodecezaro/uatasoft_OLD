@@ -1,0 +1,13 @@
+<?php
+	
+	class ErrorCreator_Model extends TiE_Model
+	{
+		
+		public function __construct(&$_db)
+		{
+			$this->db = $_db;
+		}
+		
+	}
+	
+?>

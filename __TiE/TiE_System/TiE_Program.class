@@ -84,6 +84,7 @@
 			$title = $t ? $t : $dbdata->title;
 		
 			$decorator = new TiE_Layout($decorator, new $class($this->conn), $title);
+			if(is_array($this->arrHeader)) $decorator->objDecorator->addInHeader($this->arrHeader);
 			$decorator->generate();
 		}
 		
@@ -99,8 +100,8 @@
 			$TiE_Connection = new TiE_Connection($conn);
 			$this->conn = $TiE_Connection->connect();
 			
-			$TiE_Db = new TiE_Db($this->conn);
-			dump($TiE_Db->loadSchema());
+			//$TiE_Db = new TiE_Db($this->conn);
+			//dump($TiE_Db->loadSchema());
 		}
 		
 		public function run()
