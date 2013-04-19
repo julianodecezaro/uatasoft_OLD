@@ -13,8 +13,38 @@
 		public function __ini()
 		{
 			GLOBAL $_PW;
-			$img = new img("{ src : ".$_PW['IMAGES']."logo.png }");
-			$img->generate();
+
+			$container = new div("{id: container}");
+
+			#HEADER
+			$logo = new img("{ src : ".$_PW['IMAGES']."logo.png }");
+			$header = new header();
+			$header->append($logo);
+
+			#MENU
+			$nav = new nav();
+			$nav->append(new text("Home"));
+			$nav->append(new text("Empresa"));
+			$nav->append(new text("Serviços"));
+			$nav->append(new text("Clientes"));
+			$nav->append(new text("Contato"));
+
+			#CONTENT
+			$section = new section();
+			$section->append(new text("Conteúdo"));
+
+			#FOOTER
+			$footer = new footer();
+			$footer->append(new text("Footer"));
+
+			#APPEND
+			$container->append($header);
+			$container->append($nav);
+			$container->append($section);
+			$container->append($footer);
+
+			#GENERATE
+			$container->generate();
 		}
 		
 	}

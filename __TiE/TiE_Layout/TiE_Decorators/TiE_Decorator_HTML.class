@@ -40,8 +40,8 @@
 			echo "<!DOCTYPE html>".CRLF;
 			echo "<html lang=\"pt-br\">".CRLF;
 			echo "<head>".CRLF;
-			echo "<meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">".CRLF;
             echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\" />".CRLF;
+			echo "<meta content=\"IE=edge\" http-equiv=\"X-UA-Compatible\">".CRLF;
 			//echo "<link rel=\"SHORTCUT ICON\" href=\"favicon.ico\" />".CRLF;
 			$arrHeader = $this->getArrHeader();
 			if(is_array($arrHeader)) {

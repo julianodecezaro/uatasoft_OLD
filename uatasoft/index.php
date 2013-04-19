@@ -14,6 +14,7 @@ GLOBAL $_PW;
 $favicon = $_PW['IMAGES']."us.ico";
 $app = new TiE_Program(1);
 $app->addInHeader("<link rel=\"shortcut icon\" href=\"".$favicon."\" type=\"image/png\" />");
+$app->addInHeader(style($_PW['CSS']."uatasoft.css"));
 $app->setTitle("UATASOFT");
 $app->setClass("Index_View");
 $app->setDecorator("DEFAULT_HTML");

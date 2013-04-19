@@ -1,0 +1,25 @@
+body{
+	margin: 0px;
+	font-family: Tahoma;
+	font-size: 13px;
+	font-weight: normal;
+}
+
+#container{
+	min-width: 800px;
+}
+
+nav{
+	position: fixed;
+	background-color: #333333;
+	padding: 10px;
+	top: 15px;
+	right: 15px;	
+	color: #FFFFFF;
+}
+
+nav span{
+	margin: 25px;
+	color: #FFFFFF;
+	font-weight: bold;
+}
