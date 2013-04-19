@@ -9,6 +9,7 @@
 	require_once $_PATH['FRAMEWORK']['LAYOUT']."TiE_Layout.class";
 	require_once $_PATH['FRAMEWORK']['SYSTEM']."TiE_Program.class";
 	require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_components.class";
+	require_once $_PATH['FRAMEWORK']['HTML']."TiE_HTML_components_extra.class";
     require_once $_PATH['FRAMEWORK']['JQUERY']."TiE_JQuery.class";
     require_once $_PATH['FRAMEWORK']['JQUERY']."TiE_JQuery_components.class";
     require_once $_PATH['FRAMEWORK']['MVC_CONTROLLER']."TiE_Controller.class";

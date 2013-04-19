@@ -33,7 +33,7 @@
 		if($_generate) {
 			$script->generate();
 		}else {
-			return $script;
+			return $script->getHTML();
 		}
     }
 	

@@ -123,4 +123,27 @@
 		}
 	}
 
+    class lines extends element
+    {
+        public function __construct($_elements, $_attributes = "")
+        {
+            //$this->setAttribute("method", "post");
+            $this->__elements = $_elements;
+            parent::__construct('div', $_attributes);
+        }
+
+        public function getHTML()
+        {
+            if(is_array($this->__elements) && count($this->__elements) > 0){
+                foreach($this->__elements as $id => $el) {
+                    $d = new div("{ id: lines__".$id.", class: el_lines }");
+                    $d->append($el);
+                    $this->append($d);
+                    unset($d, $id, $el);
+                }
+            }
+            return parent::getHTML();
+        }
+    }
+
 ?>

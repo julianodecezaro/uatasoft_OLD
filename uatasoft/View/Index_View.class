@@ -1,49 +1,277 @@
 <?php
 	
+	/**
+	 * Classe View da página principal do site.
+	 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+	 * @version 1.0.0 criada em 19/04/2013 às 10:01
+	 * 
+	 */
 	class Index_View extends TiE_View
 	{
-		
+		/**
+		 * Método construtor da classe
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 10:54
+		 * @param   Object $_db Objeto de conexão com o BD.
+		 */
 		public function __construct(&$_db)
 		{
 			//$this->ErrorCreator_Controller = new ErrorCreator_Controller($this);
 			$this->db = $_db;
 			$this->controller = new Index_Controller($this);
 		}
-		
-		public function __ini()
+
+		/**
+		 * Cria o header da página.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 10:52
+		 * @return  Object Retorna o elemento header do html5.
+		 */
+		public function getHeader()
 		{
 			GLOBAL $_PW;
-
-			$container = new div("{id: container}");
-
-			#HEADER
 			$logo = new img("{ src : ".$_PW['IMAGES']."logo.png }");
 			$header = new header();
-			$header->append($logo);
+			$div = new div("{class: container}");
+			$div->append($logo);
+			$header->append($div);
+			return $header;
+		}
 
-			#MENU
+		/**
+		 * Cria o menu da página.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 10:56
+		 * @return  Object Retorna o elemento nav do html5.
+		 */
+		public function getNav()
+		{
+			GLOBAL $_PW;
 			$nav = new nav();
-			$nav->append(new text("Home"));
-			$nav->append(new text("Empresa"));
-			$nav->append(new text("Serviços"));
-			$nav->append(new text("Clientes"));
-			$nav->append(new text("Contato"));
+			$div = new div("{class: container}");
+			$div->append(new img("{ src : ".$_PW['IMAGES']."nav1.png, id: nav1 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."nav2.png, id: nav2 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."nav3.png, id: nav3 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."nav4.png, id: nav4 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."nav5.png, id: nav5 }"));
+			$nav->append($div);
+			return $nav;
+		}
 
-			#CONTENT
+		/**
+		 * Cria o conteúdo das novidades.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:48
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getNews()
+		{
+			$div = new div("{ class: news }");
+
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Bla");
+			$els[] = new text("Ble");
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+			$els[] = new text("Bli");			
+
+			$div->append(new lines($els));
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo da página principal.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:37
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getContent1()
+		{
+			$div = new div("{ id: content1, class: container}");
+			$div->append($this->getNews());
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo do item uatasoft.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:38
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getContent2()
+		{
+			$div = new div("{ id: content2, class: container }");
+
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+			$els[] = new text("US");
+
+			$div->append(new lines($els));
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo do item serviços.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:38
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getContent3()
+		{
+			$div = new div("{ id: content3, class: container }");
+			$div->append(new text("serviços"));
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo do item clientes.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:40
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getContent4()
+		{
+			$div = new div("{ id: content4, class: container }");
+			$div->append(new text("clientes"));
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo do item contato.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 12:45
+		 * @return  Object Retorna elemento div do html.
+		 */
+		public function getContent5()
+		{
+			$div = new div("{ id: content5, class: container }");
+			$div->append(new text("contato"));
+			return $div;
+		}
+
+		/**
+		 * Cria o conteúdo da página.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 10:58
+		 * @return  Object Retorna o elemento section do html5.
+		 */
+		public function getContent()
+		{
 			$section = new section();
-			$section->append(new text("Conteúdo"));
+			$section->append($this->getContent1());
+			$section->append($this->getContent2());
+			$section->append($this->getContent3());
+			$section->append($this->getContent4());
+			$section->append($this->getContent5());
+			return $section;
+		}
 
-			#FOOTER
+		/**
+		 * Cria o rodapé da página.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 10:59
+		 * @return  Object Retorna o elemento footer do html5.
+		 */
+		public function getFooter()
+		{
 			$footer = new footer();
 			$footer->append(new text("Footer"));
+			return $footer;
+		}
+		
+		/**
+		 * Inicializa e constrói a página.
+		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
+		 * @version 1.0.0 criada em 19/04/2013 às 11:00		 
+		 */
+		public function __ini()
+		{
+			#CRIA O CONTAINER
+			$container = new div("{id: container}");
 
-			#APPEND
+			#CRIA O CABEÇALHO
+			$header = $this->getHeader();
+			#CRIA O MENU
+			$nav = $this->getNav();
+			#CRIA O CONTEÚDO
+			$section = $this->getContent();
+			#CRIA O RODAPÉ
+			$footer = $this->getFooter();
+
+			#ADICIONA AO CONTAINER
 			$container->append($header);
 			$container->append($nav);
 			$container->append($section);
-			$container->append($footer);
+			//$container->append($footer);
 
-			#GENERATE
+			#GERA O CONTAINER
 			$container->generate();
 		}
 		
