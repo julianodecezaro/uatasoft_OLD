@@ -27,7 +27,8 @@ header .container{
 nav{
 	position: fixed;
 	background-color: #333333;
-	padding: 10px;
+	padding-top: 2px;
+	padding-bottom: 8px;
 	bottom: 0px;
 	left: 0px;	
 	color: #FFFFFF;
@@ -53,6 +54,8 @@ nav img{
 	color: #FFFFFF;
 	font-weight: bold;	
 	cursor: pointer;
+	margin-left: 12px;
+	margin-right: 12px;
 }
 
 nav span:hover{

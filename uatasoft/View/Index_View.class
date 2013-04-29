@@ -49,11 +49,11 @@
 			GLOBAL $_PW;
 			$nav = new nav();
 			$div = new div("{class: container}");
-			$div->append(new img("{ src : ".$_PW['IMAGES']."nav1.png, id: nav1 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."nav2.png, id: nav2 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."nav3.png, id: nav3 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."nav4.png, id: nav4 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."nav5.png, id: nav5 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."home.png, id: nav1 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."uatasoft.png, id: nav2 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."servicos.png, id: nav3 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."clientes.png, id: nav4 }"));
+			$div->append(new img("{ src : ".$_PW['IMAGES']."contato.png, id: nav5 }"));
 			$nav->append($div);
 			return $nav;
 		}
