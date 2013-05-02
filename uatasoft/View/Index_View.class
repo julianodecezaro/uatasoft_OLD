@@ -30,7 +30,7 @@
 		public function getHeader()
 		{
 			GLOBAL $_PW;
-			$logo = new img("{ src : ".$_PW['IMAGES']."logo.png }");
+			$logo = new img("{ id: logo, src : ".$_PW['IMAGES']."logo_us.png }");
 			$header = new header();
 			$div = new div("{class: container}");
 			$div->append($logo);
@@ -49,11 +49,13 @@
 			GLOBAL $_PW;
 			$nav = new nav();
 			$div = new div("{class: container}");
-			$div->append(new img("{ src : ".$_PW['IMAGES']."home.png, id: nav1 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."uatasoft.png, id: nav2 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."servicos.png, id: nav3 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."clientes.png, id: nav4 }"));
-			$div->append(new img("{ src : ".$_PW['IMAGES']."contato.png, id: nav5 }"));
+			$menu = new div("{class: menu}");
+			//$div->append(new img("{ src : ".$_PW['IMAGES']."home.png, id: nav1 }"));
+			$menu->append(new img("{ src : ".$_PW['IMAGES']."uatasoft.png, id: nav2, _title: uatasoft }"));
+			$menu->append(new img("{ src : ".$_PW['IMAGES']."servicos.png, id: nav3, _title: serviços }"));
+			$menu->append(new img("{ src : ".$_PW['IMAGES']."clientes.png, id: nav4, _title: clientes }"));
+			$menu->append(new img("{ src : ".$_PW['IMAGES']."contato.png, id: nav5, _title: contato }"));
+			$div->append($menu);
 			$nav->append($div);
 			return $nav;
 		}
@@ -67,73 +69,14 @@
 		public function getNews()
 		{
 			$div = new div("{ class: news }");
+			$div->append(new lines(array(new text("Novidades")), "{class: title}"));
+			
+			$content = new div("{ class: content }");
+			$els[] = new text("Primeiro cliente.");
+			$els[] = new text("Nasce a uatasoft.");
 
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Bla");
-			$els[] = new text("Ble");
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-			$els[] = new text("Bli");			
-
-			$div->append(new lines($els));
+			$content->append(new lines($els));
+			$div->append($content);
 			return $div;
 		}
 
@@ -253,6 +196,7 @@
 		 */
 		public function __ini()
 		{
+			GLOBAL $_PW;
 			#CRIA O CONTAINER
 			$container = new div("{id: container}");
 
@@ -263,12 +207,15 @@
 			#CRIA O CONTEÚDO
 			$section = $this->getContent();
 			#CRIA O RODAPÉ
-			$footer = $this->getFooter();
+			//$footer = $this->getFooter();
 
 			#ADICIONA AO CONTAINER
 			$container->append($header);
 			$container->append($nav);
 			$container->append($section);
+			$container->append(new img("{ src: ".($_PW['IMAGES']."nuvem.png").", id: dmenu }"));
+			$container->append(new img("{ src: ".($_PW['IMAGES']."fundo1.png").", id: bg }"));
+			$container->append(new div("{ class: dmenu_span }"));
 			//$container->append($footer);
 
 			#GERA O CONTAINER
