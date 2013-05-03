@@ -137,3 +137,15 @@ section .container{
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=93)";
 	filter: alpha(opacity=93); -moz-opacity:0.93; -khtml-opacity: 0.93; opacity: 0.93;
 }
+
+.aside{
+	clear: both;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border-left: 4px #DDDDDD solid;
+	z-index: 99999;	
+}
+
+* { margin: 0; padding: 0; }
+html, body { height: 100%; width: 100%; }

@@ -6,7 +6,7 @@ $(document).ready(function(){
 		adjustContent();
 	});
 
-	$(window).resize(function(){ adjustContent() });
+	$(window).resize(function(){ adjustContent(); });
 
 	$('#logo').click(function(){ _menu(1); });
 	$('#nav2').click(function(){ _menu(2); });
@@ -56,7 +56,7 @@ $(document).ready(function(){
 		});
 	}	
 
-	function adjustContent(){		
+	function adjustContent(){	
 		//alert($(window).height() +'-'+$('nav').outerHeight());		
 		$('section .container').css({ 'max-height' : ($(window).height() - $('nav').outerHeight()
 													 - ($('section .container').outerHeight() - $('section .container').height())),
@@ -65,8 +65,9 @@ $(document).ready(function(){
 		$('section').css({
 							'margin-top' : $('nav').outerHeight()
 						});
-		$('#bg').css({ top: '75px', right : '0px', width: $(window).width/2, height: ($(window).height() - $('nav').outerHeight()
-													 - ($('section .container').outerHeight() - $('section .container').height())) });
+		//$('#bg').css({ top: '75px', right : '0px', width: $(window).width/2, height: ($(window).height() - $('nav').outerHeight()
+		//											 - ($('section .container').outerHeight() - $('section .container').height())) });
+		createSideBar();
 	}
 
 	$('.menu').mousemove(function(e){		
@@ -82,6 +83,36 @@ $(document).ready(function(){
 		$('#dmenu').hide();
 		$('.dmenu_span').hide();		
 	});
-	
+
+	function getSideBgColor(){
+		var id = $('section .container:visible').attr('id');
+		//alert(id);
+		if(id == 'content1'){
+			return '#DDDDDD';
+		}else if(id == 'content2'){
+			return '#146544';
+		}else{
+			return '#333333';
+		}
+	}
+
+	function createSideBar(){
+		var psize = 150;
+		//var div = $('<div class=\"\">asd</div>');
+		//$('.aside').append(div);
+		//alert($('nav').outerHeight());
+		$('#division').load(function(){
+			$('#division').css({ top: $('nav').outerHeight(), left: (($(window).width()/2) - psize),
+								 height: $(window).height() - $('nav').outerHeight() });
+			$('.aside').css({ top: $('nav').outerHeight(), left: $(window).width()/2 - psize, 
+							 width: ($(window).width()/2) + psize, height: $(window).height() - $('nav').outerHeight(),
+							 'background-color': getSideBgColor() });
+		});
+		$('#division').css({ top: $('nav').outerHeight(), left: (($(window).width()/2) - psize),
+							 height: $(window).height() - $('nav').outerHeight() });
+		$('.aside').css({ top: $('nav').outerHeight(), left: $(window).width()/2 - psize, 
+						 width: ($(window).width()/2) + psize, height: $(window).height() - $('nav').outerHeight(),
+						 'background-color': getSideBgColor() });
+	}
 
 });

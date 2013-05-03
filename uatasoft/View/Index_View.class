@@ -176,6 +176,12 @@
 			return $section;
 		}
 
+		public function getASide()
+		{
+			$aside = new div('{class: aside}');
+			return $aside;
+		}
+
 		/**
 		 * Cria o rodapé da página.
 		 * @author  Juliano S. De Cezaro <julianodecezaro@uatasoft.com.br>
@@ -206,15 +212,17 @@
 			$nav = $this->getNav();
 			#CRIA O CONTEÚDO
 			$section = $this->getContent();
+			#CRIA SIDE BAR
+			$aside = $this->getASide();
 			#CRIA O RODAPÉ
 			//$footer = $this->getFooter();
 
 			#ADICIONA AO CONTAINER
 			$container->append($header);
 			$container->append($nav);
+			$container->append($aside);
 			$container->append($section);
 			$container->append(new img("{ src: ".($_PW['IMAGES']."nuvem.png").", id: dmenu }"));
-			$container->append(new img("{ src: ".($_PW['IMAGES']."fundo1.png").", id: bg }"));
 			$container->append(new div("{ class: dmenu_span }"));
 			//$container->append($footer);
 
